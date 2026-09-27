@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&amp;family=Instrument+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#3D2B56"></rect><text x="50" y="58" text-anchor="middle" font-family="Georgia,serif" font-size="22" letter-spacing="4" fill="#F2EEF4">ANB</text></svg></template>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #F2EEF4; }
+  body { font-family: 'Instrument Sans', system-ui, sans-serif; color: #14111B; -webkit-font-smoothing: antialiased; text-wrap: pretty; }
+  a { color: #3D2B56; text-decoration: none; }
+  a:hover { color: #14111B; text-decoration: underline; text-underline-offset: 3px; }
+  button { font: inherit; }
+  ::selection { background: #3D2B56; color: #F7F4F9; }
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:#F2EEF4">
+
+<header style="position:sticky;top:0;z-index:50;background:rgba(242,238,244,0.94);backdrop-filter:blur(12px);border-bottom:1px solid rgba(61,43,86,0.14)">
+  <div style="max-width:1280px;margin:0 auto;padding:0 clamp(20px,5vw,56px);height:80px;display:flex;align-items:center;gap:clamp(16px,4vw,48px)">
+    <button onClick="{{ goHome }}" style="background:none;border:none;padding:0;cursor:pointer;text-align:left;flex-shrink:0">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:27px;font-weight:500;letter-spacing:0.22em;color:#14111B;line-height:1">ANB</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:0.17em;text-transform:uppercase;color:#3D2B56;margin-top:3px">Auckland New Ballet</div>
+    </button>
+
+    <sc-if value="{{ isCompact }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;align-items:center;gap:10px;margin-left:auto">
+      <a href="#tickets" style="background:#3D2B56;color:#F7F4F9;padding:12px 20px;font-size:11.5px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;white-space:nowrap" style-hover="background:#14111B;color:#F7F4F9;text-decoration:none">Tickets</a>
+      <button onClick="{{ toggleDrawer }}" style="background:none;border:1px solid rgba(61,43,86,0.3);color:#14111B;padding:12px 18px;font-size:11.5px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap" style-hover="background:#3D2B56;color:#F7F4F9;border-color:#3D2B56">{{ drawerLabel }}</button>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ isWide }}" hint-placeholder-val="{{ true }}"><nav style="display:flex;align-items:center;gap:4px;margin-left:auto">
+      <sc-if value="{{ isWide }}" hint-placeholder-val="{{ true }}">
+      <sc-for list="{{ navGroups }}" as="g" hint-placeholder-count="5">
+        <div style="position:relative" onMouseEnter="{{ g.onEnter }}" onMouseLeave="{{ closeMenu }}">
+          <button onClick="{{ g.go }}" style="background:none;border:none;cursor:pointer;padding:10px 14px;font-size:13.5px;font-weight:500;letter-spacing:0.04em;color:#14111B;display:flex;align-items:center;gap:7px;white-space:nowrap" style-hover="color:#3D2B56">
+            {{ g.label }}
+            <sc-if value="{{ g.hasChildren }}" hint-placeholder-val="{{ true }}">
+              <span style="font-size:9px;color:#6B5580">▾</span>
+            </sc-if>
+          </button>
+          <sc-if value="{{ g.isOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;top:100%;left:0;min-width:238px;background:#FBF9FC;border:1px solid rgba(61,43,86,0.14);box-shadow:0 18px 44px -18px rgba(20,17,27,0.28);padding:8px;display:flex;flex-direction:column">
+              <sc-for list="{{ g.children }}" as="c" hint-placeholder-count="3">
+                <button onClick="{{ c.go }}" style="background:none;border:none;cursor:pointer;text-align:left;padding:11px 14px;font-size:13.5px;color:#14111B;white-space:nowrap" style-hover="background:#F2EEF4;color:#3D2B56">{{ c.label }}</button>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+      </sc-for>
+      <a href="#tickets" style="margin-left:14px;background:#3D2B56;color:#F7F4F9;padding:13px 26px;font-size:12.5px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;white-space:nowrap" style-hover="background:#14111B;color:#F7F4F9;text-decoration:none">Buy Tickets</a>
+      </sc-if>
+    </nav></sc-if>
+  </div>
+  <sc-if value="{{ drawerOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="border-top:1px solid rgba(61,43,86,0.14);background:#FBF9FC;padding:14px clamp(20px,5vw,56px) 26px;display:flex;flex-direction:column;align-items:flex-start;gap:2px;max-height:70vh;overflow:auto">
+      <sc-for list="{{ flatNav }}" as="n" hint-placeholder-count="9">
+        <button onClick="{{ n.go }}" style="background:none;border:none;cursor:pointer;text-align:left;width:100%;padding:14px 0;font-size:15px;color:#14111B;border-bottom:1px solid rgba(61,43,86,0.1)" style-hover="color:#3D2B56">{{ n.label }}</button>
+      </sc-for>
+    </div>
+  </sc-if>
+</header>
+
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+<main>
+  <section style="position:relative;min-height:min(80vh,760px);display:flex;align-items:flex-end;overflow:hidden;background:#14111B">
+    <div style="position:absolute;inset:0;overflow:hidden">
+      <image-slot id="hero-poster" shape="rect" fit="cover" placeholder="Hero poster frame — shown when motion is reduced"></image-slot>
+    </div>
+    <sc-if value="{{ heroVideo }}" hint-placeholder-val="{{ true }}">
+      <div style="position:absolute;inset:0;overflow:hidden;background:#14111B">
+        <iframe ref="{{ heroRef }}" src="https://www.youtube-nocookie.com/embed/YCJBVi9LKFs?autoplay=1&amp;mute=1&amp;loop=1&amp;playlist=YCJBVi9LKFs&amp;controls=0&amp;disablekb=1&amp;modestbranding=1&amp;playsinline=1&amp;rel=0&amp;iv_load_policy=3&amp;enablejsapi=1" title="Auckland New Ballet — Folklore" frameborder="0" allow="autoplay; encrypted-media" referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:max(100%,177.8vh);height:max(100%,56.25vw);border:0;pointer-events:none"></iframe>
+      </div>
+    </sc-if>
+    <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(20,17,27,0.82) 0%,rgba(20,17,27,0.34) 45%,rgba(20,17,27,0.12) 100%);pointer-events:none"></div>
+    <div style="position:relative;width:100%;max-width:1280px;margin:0 auto;padding:clamp(40px,7vw,88px) clamp(20px,5vw,56px)">
+      <div style="max-width:780px">
+        <div style="font-size:11.5px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#C9B27E;margin-bottom:22px">Inaugural Season — Folklore</div>
+        <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(40px,6.6vw,80px);font-weight:400;line-height:1.04;letter-spacing:-0.012em;color:#FBF9FC;margin:0 0 24px">Ballet as you’ve never experienced it — up-close, immersive, intimate.</h1>
+        <p style="font-size:clamp(15px,1.5vw,18px);line-height:1.6;color:rgba(251,249,252,0.9);margin:0 0 34px;max-width:560px">Auckland New Ballet is Tāmaki Makaurau’s newest and only collective of professional ballet artists.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center">
+          <a href="#tickets" style="background:#FBF9FC;color:#14111B;padding:16px 34px;font-size:12.5px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase" style-hover="background:#C9B27E;color:#14111B;text-decoration:none">Buy Tickets</a>
+          <button onClick="{{ goProgrammes }}" style="background:none;border:1px solid rgba(251,249,252,0.42);color:#FBF9FC;padding:16px 30px;font-size:12.5px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer" style-hover="border-color:#FBF9FC;background:rgba(251,249,252,0.1)">See the Season</button>
+        </div>
+      </div>
+    </div>
+    <button onClick="{{ toggleHero }}" style="position:absolute;right:clamp(20px,5vw,56px);top:32px;background:rgba(20,17,27,0.55);border:1px solid rgba(251,249,252,0.32);color:#FBF9FC;padding:10px 18px;font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;backdrop-filter:blur(6px)" style-hover="background:rgba(20,17,27,0.8)">{{ heroLabel }}</button>
+    <div style="position:absolute;right:clamp(20px,5vw,56px);bottom:26px;font-size:10.5px;letter-spacing:0.08em;color:rgba(251,249,252,0.62);font-family:ui-monospace,monospace;pointer-events:none">{{ heroNote }}</div>
+  </section>
+
+  <section style="padding:clamp(64px,9vw,128px) clamp(20px,5vw,56px);border-bottom:1px solid rgba(61,43,86,0.14)">
+    <div style="max-width:1000px;margin:0 auto;text-align:center" data-reveal="1">
+      <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(26px,3.6vw,46px);font-weight:300;line-height:1.28;color:#14111B;margin:0">We’re here to connect to, converse with, and move people.</p>
+      <div style="width:56px;height:1px;background:#937B45;margin:36px auto 0"></div>
+    </div>
+  </section>
+
+  <section id="tickets" style="padding:clamp(64px,9vw,120px) clamp(20px,5vw,56px);background:#FBF9FC;border-bottom:1px solid rgba(61,43,86,0.14)">
+    <div style="max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:clamp(32px,5vw,72px);align-items:center">
+      <div data-reveal="1">
+        <div style="font-size:11.5px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#937B45;margin-bottom:20px">Upcoming Season</div>
+        <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(34px,4.6vw,60px);font-weight:400;line-height:1.08;margin:0 0 22px">Folklore</h2>
+        <p style="font-size:16px;line-height:1.68;color:#4A4356;margin:0 0 26px;max-width:52ch">A ballet in two acts at the stunning Holy Trinity Cathedral, with live accompaniment by the Kulios Ensemble. Folklore celebrates humanity’s enduring fascination with myth, fairytale and fable.</p>
+        <div style="display:flex;flex-direction:column;gap:2px;border-top:1px solid rgba(61,43,86,0.14);margin-bottom:30px">
+          <div style="display:flex;flex-wrap:wrap;gap:10px 22px;padding:15px 0;border-bottom:1px solid rgba(61,43,86,0.14)">
+            <span style="font-size:14px;font-weight:600;min-width:150px">Thu 18 September</span>
+            <span style="font-size:14px;color:#5D5568">7.00pm — Evening</span>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:10px 22px;padding:15px 0;border-bottom:1px solid rgba(61,43,86,0.14)">
+            <span style="font-size:14px;font-weight:600;min-width:150px">Fri 19 September</span>
+            <span style="font-size:14px;color:#5D5568">1.00pm — Quiet Matinee</span>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:10px 22px;padding:15px 0;border-bottom:1px solid rgba(61,43,86,0.14)">
+            <span style="font-size:14px;font-weight:600;min-width:150px">Fri 19 September</span>
+            <span style="font-size:14px;color:#5D5568">6.00pm — Evening</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center">
+          <a href="#tickets" style="background:#3D2B56;color:#F7F4F9;padding:16px 34px;font-size:12.5px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase" style-hover="background:#14111B;text-decoration:none;color:#F7F4F9">Buy Tickets</a>
+          <button onClick="{{ goProgrammes }}" style="background:none;border:none;cursor:pointer;padding:16px 0;font-size:13.5px;font-weight:500;color:#3D2B56;border-bottom:1px solid rgba(61,43,86,0.4)" style-hover="color:#14111B;border-color:#14111B">Full programme details</button>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;min-width:0" data-reveal="1">
+        <div style="grid-column:span 2;aspect-ratio:16/10;min-width:0;overflow:hidden"><image-slot id="home-season-1" shape="rect" placeholder="Folklore production shot — wide"></image-slot></div>
+        <div style="aspect-ratio:4/5;min-width:0;overflow:hidden"><image-slot id="home-season-2" shape="rect" placeholder="Rehearsal, Tales of the Past"></image-slot></div>
+        <div style="aspect-ratio:4/5;min-width:0;overflow:hidden"><image-slot id="home-season-3" shape="rect" placeholder="Kulios Ensemble, live"></image-slot></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:clamp(64px,9vw,120px) clamp(20px,5vw,56px);border-bottom:1px solid rgba(61,43,86,0.14)">
+    <div style="max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:clamp(32px,5vw,72px);align-items:center">
+      <div style="aspect-ratio:3/2;order:2;min-width:0;overflow:hidden" data-reveal="1"><image-slot id="home-pointe" shape="rect" placeholder="Pointe shoes, worn — detail"></image-slot></div>
+      <div data-reveal="1">
+        <div style="font-size:11.5px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#937B45;margin-bottom:20px">Every ribbon makes a difference</div>
+        <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(30px,3.8vw,48px);font-weight:400;line-height:1.1;margin:0 0 22px">The Pointe Shoe Fund</h2>
+        <p style="font-size:16px;line-height:1.68;color:#4A4356;margin:0 0 28px;max-width:52ch">Our freelance dancers cover the cost of their own shoes out of pocket. In 2027 that cost will exceed $7,000. Every donation, large or small, makes a world of difference.</p>
+        <button onClick="{{ goDonate }}" style="background:none;border:1px solid #3D2B56;color:#3D2B56;padding:16px 32px;font-size:12.5px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer" style-hover="background:#3D2B56;color:#F7F4F9">Ways to Donate</button>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:clamp(48px,6vw,80px) clamp(20px,5vw,56px);background:#FBF9FC;border-bottom:1px solid rgba(61,43,86,0.14)">
+    <div style="max-width:1280px;margin:0 auto" data-reveal="1">
+      <div style="font-size:11.5px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#937B45;margin-bottom:30px;text-align:center">With the support of</div>
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:16px">
+        <div style="width:170px;height:78px;border:1px dashed rgba(61,43,86,0.28);display:flex;align-items:center;justify-content:center;padding:10px;text-align:center;font-family:ui-monospace,monospace;font-size:10.5px;letter-spacing:0.04em;color:#6B5580">LOGO — M. D. Fotti</div>
+        <div style="width:170px;height:78px;display:flex;align-items:center;justify-content:center;padding:4px 10px">
+          <img src="./assets/family-office-advisory.png" alt="Family Office Advisory Ltd" style="max-width:100%;max-height:100%;object-fit:contain;display:block;mix-blend-mode:multiply">
+        </div>
+        <div style="width:170px;height:78px;display:flex;align-items:center;justify-content:center;padding:4px 10px">
+          <img src="./assets/pure-dance.png" alt="Pure Dance" style="max-width:100%;max-height:100%;object-fit:contain;display:block;mix-blend-mode:multiply">
+        </div>
+        <div style="width:170px;height:78px;display:flex;align-items:center;justify-content:center;padding:4px 10px">
+          <img src="./assets/erin-bowerman.svg" alt="Erin Bowerman Strength and Conditioning" style="max-width:100%;max-height:100%;object-fit:contain;display:block">
+        </div>
+        <div style="width:170px;height:78px;display:flex;align-items:center;justify-content:center;padding:4px 10px">
+          <img src="./assets/wellesley-studios.svg" alt="Wellesley Studios" style="max-width:100%;max-height:100%;object-fit:contain;display:block">
+        </div>
+        <div style="width:170px;height:78px;display:flex;align-items:center;justify-content:center;padding:6px 10px">
+          <img src="./assets/auckland-council.svg" alt="Auckland Council" style="max-width:100%;max-height:100%;object-fit:contain;display:block">
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+</sc-if>
+
+<sc-if value="{{ isAbout }}" hint-placeholder-val="{{ false }}">
+<main>
+  <section style="padding:clamp(56px,8vw,104px) clamp(20px,5vw,56px) clamp(40px,5vw,64px)">
+    <div style="max-width:1280px;margin:0 auto">
+      <div style="font-size:11.5px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#937B45;margin-bottom:20px">Who We Are</div>
+      <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(40px,6vw,76px);font-weight:400;line-height:1.05;margin:0;max-width:20ch">About Us</h1>
+    </div>
+  </section>
+  <section style="padding:0 clamp(20px,5vw,56px) clamp(56px,8vw,104px)">
+    <div style="max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:clamp(32px,5vw,72px)">
+      <div data-reveal="1">
+        <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(23px,2.6vw,32px);font-weight:300;line-height:1.34;margin:0 0 32px;color:#14111B">Auckland New Ballet began as a dream — seven freelance ballet dancers who realised a shared passion for connecting audiences with ballet.</p>
+        <p style="font-size:16px;line-height:1.72;color:#4A4356;margin:0 0 20px">We realised there was no home for classical ballet in Auckland and its surrounding regions, and with hours of donated time, trust and belief, Auckland New Ballet was born.</p>
+        <p style="font-size:16px;line-height:1.72;color:#4A4356;margin:0 0 20px">Our goal is to introduce the awe, grace and power of ballet to new and diverse audiences, up-close and deeply immersive. We’re passionate about sharing our incredible art form and believe all should have the chance to experience ballet’s ability to move and inspire.</p>
+        <p style="font-size:16px;line-height:1.72;color:#4A4356;margin:0">As a small and lightweight company we have the flexibility to showcase a diverse mix of repertoire and storytelling and bring our performances to under-served regions of New Zealand. We aim for our work to be immersive, close-up and unexpected and to foster connection and dialogue with new and returning audiences.</p>
+      </div>
+      <div style="aspect-ratio:3/2;align-self:center;min-width:0;overflow:hidden" data-reveal="1"><image-slot id="about-hero" shape="rect" placeholder="Company portrait or studio rehearsal"></image-slot></div>
+    </div>
+  </section>
+  <section style="padding:clamp(56px,8vw,104px) clamp(20px,5vw,56px);background:#FBF9FC;border-top:1px solid rgba(61,43,86,0.14)">
+    <div style="max-width:1280px;margin:0 auto">
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(28px,3.4vw,44px);font-weight:400;margin:0 0 clamp(32px,4vw,56px);max-width:24ch" data-reveal="1">ANB was founded on these core principles</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:1px;background:rgba(61,43,86,0.14);border:1px solid rgba(61,43,86,0.14)">
+        <sc-for list="{{ principles }}" as="p" hint-placeholder-count="6">
+          <div style="background:#FBF9FC;padding:clamp(24px,3vw,38px)" data-reveal="1">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:32px;color:#937B45;line-height:1;margin-bottom:18px">{{ p.num }}</div>
+            <p style="font-size:15px;line-height:1.66;color:#4A4356;margin:0">{{ p.text }}</p>
+          </div>
+        </sc-for>
+      </div>
+      <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(22px,2.4vw,30px);font-weight:300;line-height:1.36;margin:clamp(40px,5vw,64px) 0 0;max-width:34ch;color:#3D2B56" data-reveal="1">We celebrate the unique cultural fabric and taonga tuku iho of Aotearoa.</p>
+    </div>
+  </section>
+</main>
+</sc-if>
+
+<sc-if value="{{ isArtists }}" hint-placeholder-val="{{ false }}">
+<main>
+  <section style="padding:clamp(56px,8vw,104px) clamp(20px,5vw,56px) clamp(32px,4vw,48px)">
+    <div style="max-width:1280px;margin:0 auto">
+      <div style="font-size:11.5px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#937B45;margin-bottom:20px">Who We Are</div>
+      <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(40px,6vw,76px);font-weight:400;line-height:1.05;margin:0 0 28px">ANB Artists</h1>
+      <p style="font-size:17px;line-height:1.66;color:#4A4356;margin:0 0 36px;max-width:56ch">Eight professional ballet artists, trained across Moscow, London, Melbourne, New York and Aotearoa, who chose to build a home for classical ballet in Tāmaki Makaurau.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;border-top:1px solid rgba(61,43,86,0.14);padding-top:22px">
+        <a href="#artist-madison" style="font-size:13px;padding:8px 15px;border:1px solid rgba(61,43,86,0.22);color:#3D2B56" style-hover="background:#3D2B56;color:#F7F4F9;text-decoration:none">Madison Fotti-Knowles</a>
+        <a href="#artist-amelia" style="font-size:13px;padding:8px 15px;border:1px solid rgba(61,43,86,0.22);color:#3D2B56" style-hover="background:#3D2B56;color:#F7F4F9;text-decoration:none">Amelia Chandulal-Mackay</a>
+        <a href="#artist-zoe" style="font-size:13px;padding:8px 15px;border:1px solid rgba(61,43,86,0.22);color:#3D2B56" style-hover="background:#3D2B56;color:#F7F4F9;text-decoration:none">Zoe White</a>
+        <a href="#artist-isabella" style="font-size:13px;padding:8px 15px;border:1px solid rgba(61,43,86,0.22);color:#3D2B56" style-hover="background:#3D2B56;color:#F7F4F9;text-decoration:none">Isabella Guyan</a>
+        <a href="#artist-kimberley" style="font-size:13px;padding:8px 15px;border:1px solid rgba(61,43,86,0.22);color:#3D2B56" style-hover="background:#3D2B56;color:#F7F4F9;text-decoration:none">Kimberley Mear</a>
+        <a href="#artist-louis" style="font-size:13px;padding:8px 15px;border:1px solid rgba(61,43,86,0.22);color:#3D2B56" style-hover="background:#3D2B56;color:#F7F4F9;text-decoration:none">Louis Ramsay</a>
+        <a href="#artist-katrina" style="font-size:13px;padding:8px 15px;border:1px solid rgba(61,43,86,0.22);color:#3D2B56" style-hover="background:#3D2B56;color:#F7F4F9;text-decoration:none">Katrina Casey</a>
+        <a href="#artist-grace" style="font-size:13px;padding:8px 15px;border:1px solid rgba(61,43,86,0.22);color:#3D2B56" style-hover="background:#3D2B56;color:#F7F4F9;text-decoration:none">Grace Ella</a>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:0 clamp(20px,5vw,56px) clamp(56px,8vw,104px)">
+    <div style="max-width:1280px;margin:0 auto;display:flex;flex-direction:column;gap:1px;background:rgba(61,43,86,0.14);border-top:1px solid rgba(61,43,86,0.14)">
+
+      <div id="artist-madison" style="background:#F2EEF4;padding:clamp(32px,4vw,56px) 0;display:flex;flex-wrap:wrap;align-items:flex-start;gap:clamp(24px,4vw,52px);scroll-margin-top:96px" data-reveal="1">
+        <div style="width:min(100%,264px);aspect-ratio:4/5;flex-shrink:0;min-width:0;overflow:hidden"><image-slot id="artist-photo-madison" shape="rect" placeholder="Madison Fotti-Knowles — headshot"></image-slot></div>
+        <div style="flex:1 1 300px;min-width:0">
+          <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(28px,3vw,38px);font-weight:400;margin:0 0 8px">Madison Fotti-Knowles</h2>
+          <div style="font-size:11.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#937B45;margin-bottom:22px">ANB Founder and Artist</div>
+          <p style="font-size:15.5px;line-height:1.72;color:#4A4356;margin:0 0 16px;max-width:60ch">Madison completed her pre-professional training at the Moscow State Academy of Choreography before apprenticing with New York Dance Project and City Ballet of Boston. Until the Covid-19 pandemic she performed with Russian National Ballet. Since 2020 she has been a freelance dancer in NZ and has guested internationally with Fever’s Ballet of Lights and the Stars of Russian Ballet Gala.</p>
+          <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;line-height:1.55;color:#3D2B56;margin:0;max-width:52ch">Her favourite dance memory is taking class in the Ulanova Studio of the Bolshoi Theatre.</p>
+        </div>
+      </div>
+
+      <div id="artist-amelia" style="background:#F2EEF4;padding:clamp(32px,4vw,56px) 0;display:flex;flex-wrap:wrap;align-items:flex-start;gap:clamp(24px,4vw,52px);scroll-margin-top:96px" data-reveal="1">
+        <div style="flex:1 1 300px;min-width:0;order:2">
+          <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(28px,3vw,38px);font-weight:400;margin:0 0 8px">Amelia Chandulal-Mackay</h2>
+          <div style="font-size:11.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#937B45;margin-bottom:22px">ANB Founder and Artist</div>
+          <p style="font-size:15.5px;line-height:1.72;color:#4A4356;margin:0 0 16px;max-width:60ch">Amelia is an Auckland-based classical dancer and a 2026 Peacocke Dance Trust grant recipient. Since 2024 she has performed as an artist with Ballet Collective Aotearoa under Turid Revfeim, which remains some of her most fulfilling work to date. Her New Zealand credits span festivals throughout the country and include works by Loughlan Prior, Turid Revfeim, Sarah Knox and Mary-Jane O’Reilly.</p>
+          <p style="font-size:15.5px;line-height:1.72;color:#4A4356;margin:0;max-width:60ch">Internationally, Amelia has danced with Milwaukee Ballet II, Oklahoma City Ballet’s studio company and Orlando Ballet, and trained on full scholarship at the Ailey School in New York. She has also performed at NZ Fashion Week and led an international campaign for Viltrox. She is passionate about building a place for classical and contemporary ballet within the independent dance sector.</p>
+        </div>
+        <div style="width:min(100%,264px);aspect-ratio:4/5;flex-shrink:0;order:1;min-width:0;overflow:hidden"><image-slot id="artist-photo-amelia" shape="rect" placeholder="Amelia Chandulal-Mackay — headshot"></image-slot></div>
+      </div>
+
+      <div id="artist-zoe" style="background:#F2EEF4;padding:clamp(32px,4vw,56px) 0;display:flex;flex-wrap:wrap;align-items:flex-start;gap:clamp(24px,4vw,52px);scroll-margin-top:96px" data-reveal="1">
+        <div style="width:min(100%,264px);aspect-ratio:4/5;flex-shrink:0;min-width:0;overflow:hidden"><image-slot id="artist-photo-zoe" shape="rect" placeholder="Zoe White — headshot"></image-slot></div>
+        <div style="flex:1 1 300px;min-width:0">
+          <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(28px,3vw,38px);font-weight:400;margin:0 0 8px">Zoe White</h2>
+          <div style="font-size:11.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#937B45;margin-bottom:22px">ANB Founder and Artist</div>
+          <p style="font-size:15.5px;line-height:1.72;color:#4A4356;margin:0 0 16px;max-width:60ch">A graduate of Rambert School (2020) and Sydney Dance Company’s Pre-Professional Year (2021), Zoe has since worked across a wide range of projects, including multiple performances with Ballet Collective Aotearoa (The Miraculous Mandarin, Koolish Zein, FEVER/DREAM) and Black Grace (RAGE RAGE, Esplanade). A keen collaborator, she has worked in classical and contemporary spaces, immersive theatre, music videos, short film and installation.</p>
+          <p style="font-size:15.5px;line-height:1.72;color:#4A4356;margin:0 0 16px;max-width:60ch">She is consistently inspired by the independent artists of Tāmaki Makaurau, one of the reasons she has remained in Aotearoa. Zoe is a performing artist, co-producer and choreographer for Folklore.</p>
+          <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;line-height:1.55;color:#3D2B56;margin:0;max-width:52ch">One of Zoe’s favourite dance memories is joining the Imperial Russian Ballet’s Auckland performances of The Nutcracker at age nine as a child extra. It felt like a dream come true.</p>
+        </div>
+      </div>
+
+      <div id="artist-isabella" style="background:#F2EEF4;padding:clamp(32px,4vw,56px) 0;display:flex;flex-wrap:wrap;align-items:flex-start;gap:clamp(24px,4vw,52px);scroll-margin-top:96px" data-reveal="1">
+        <div style="flex:1 1 300px;min-width:0;order:2">
+          <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(28px,3vw,38px);font-weight:400;margin:0 0 8px">Isabella Guyan</h2>
+          <div style="font-size:11.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#937B45;margin-bottom:22px">ANB Founder and Artist</div>
+          <p style="font-size:15.5px;line-height:1.72;color:#4A4356;margin:0 0 16px;max-width:60ch">Isabella trained at Moorland International Ballet Academy in England, where she received her ISTD Cecchetti Diploma in Teaching. She joined B&amp;M2 Junior Company in France, dancing both neo-classical and contemporary repertoire, then returned to England for Northern Ballet’s Graduate Programme and toured the children’s ballet Tortoise and the Hare. Since then she has performed at SkyCity in Sleeping Beauty, Peter Pan and Cinderella, and teaches at ballet schools across Auckland.</p>
+          <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;line-height:1.55;color:#3D2B56;margin:0;max-width:52ch">One of Isabella’s favourite memories is hearing children laugh and react to her as Molly the Mole in Tortoise and the Hare.</p>
+        </div>
+        <div style="width:min(100%,264px);aspect-ratio:4/5;flex-shrink:0;order:1;min-width:0;overflow:hidden"><image-slot id="artist-photo-isabella" shape="rect" placeholder="Isabella Guyan — headshot"></image-slot></div>
+      </div>
+
+      <div id="artist-kimberley" style="background:#F2EEF4;padding:clamp(32px,4vw,56px) 0;display:flex;flex-wrap:wrap;align-items:flex-start;gap:clamp(24px,4vw,52px);scroll-margin-top:96px" data-reveal="1">
+        <div style="width:min(100%,264px);aspect-ratio:4/5;flex-shrink:0;min-width:0;overflow:hidden"><image-slot id="artist-photo-kimberley" shape="rect" placeholder="Kimberley Mear — headshot"></image-slot></div>
+        <div style="flex:1 1 300px;min-width:0">
+          <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(28px,3vw,38px);font-weight:400;margin:0 0 8px">Kimberley Mear</h2>
+          <div style="font-size:11.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#937B45;margin-bottom:22px">ANB Founder and Artist</div>
+          <p style="font-size:15.5px;line-height:1.72;color:#4A4356;margin:0 0 16px;max-width:60ch">Kimberley began her training at Thames Hauraki Ballet Theatre before joining the Future Dancers Programme at Mount Eden Ballet Academy, continuing at Melbourne City Ballet and the National Theatre Ballet School. She later joined Victorian State Ballet, touring extensively through regional Australia in full-length classical ballets.</p>
+          <p style="font-size:15.5px;line-height:1.72;color:#4A4356;margin:0 0 16px;max-width:60ch">After returning to New Zealand she gained her STOTT Pilates qualifications and became a Registered RAD teacher through the Professional Dancers’ Postgraduate Teaching Diploma. Alongside teaching, she continues to perform with Fever Global’s Ballet of Lights, and is passionate about expanding access to live ballet.</p>
+          <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;line-height:1.55;color:#3D2B56;margin:0;max-width:52ch">A favourite training experience: dancing at Canada’s National Ballet School in Toronto while competing in the Genée International Ballet Competition.</p>
+        </div>
+      </div>
+
+      <div id="artist-louis" style="background:#F2EEF4;padding:clamp(32px,4vw,56px) 0;display:flex;flex-wrap:wrap;align-items:flex-start;gap:clamp(24px,4vw,52px);scroll-margin-top:96px" data-reveal="1">
+        <div style="flex:1 1 300px;min-width:0;order:2">
+          <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(28px,3vw,38px);font-weight:400;margin:0 0 8px">Louis Ramsay</h2>
+          <div style="font-size:11.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#937B45;margin-bottom:22px">ANB Founder and Artist</div>
+          <p style="font-size:15.5px;line-height:1.72;color:#4A4356;margin:0 0 16px;max-width:60ch">Louis trained at the Australian Ballet School, graduating in 2019, then joined Queensland Ballet’s Young Artist programme for two years. He has since returned home to Auckland to dance freelance and is studying to be a nurse, and has been a guest artist at ballet school productions in Auckland and Christchurch. Louis finds ANB a space to continue to dance beloved classical repertoire.</p>
+          <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;line-height:1.55;color:#3D2B56;margin:0;max-width:52ch">His favourite memory of dancing is as a child extra in Greg Horsman’s Sleeping Beauty for the RNZB in 2011 — which he performed again ten years later with Queensland Ballet.</p>
+        </div>
+        <div style="width:min(100%,264px);aspect-ratio:4/5;flex-shrink:0;order:1;min-width:0;overflow:hidden"><image-slot id="artist-photo-louis" shape="rect" placeholder="Louis Ramsay — headshot"></image-slot></div>
+      </div>
+
+      <div id="artist-katrina" style="background:#F2EEF4;padding:clamp(32px,4vw,56px) 0;display:flex;flex-wrap:wrap;align-items:flex-start;gap:clamp(24px,4vw,52px);scroll-margin-top:96px" data-reveal="1">
+        <div style="width:min(100%,264px);aspect-ratio:4/5;flex-shrink:0;min-width:0;overflow:hidden"><image-slot id="artist-photo-katrina" shape="rect" placeholder="Katrina Casey — headshot"></image-slot></div>
+        <div style="flex:1 1 300px;min-width:0">
+          <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(28px,3vw,38px);font-weight:400;margin:0 0 8px">Katrina Casey</h2>
+          <div style="font-size:11.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#937B45;margin-bottom:22px">ANB Artist</div>
+          <p style="font-size:15.5px;line-height:1.72;color:#4A4356;margin:0 0 16px;max-width:60ch">Katrina is a graduate of the New Zealand School of Dance. During her training she seconded with the Royal New Zealand Ballet for their 2025 season of Dazzlehands, guest performed at the South Island Ballet Awards, and worked with various international choreographers. She is studying towards a Bachelor of Health Science in Physiotherapy and teaches ballet. She is thrilled to make her professional debut with Auckland New Ballet.</p>
+          <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;line-height:1.55;color:#3D2B56;margin:0;max-width:52ch">Katrina’s favourite dancing memory is performing Christopher Hampson’s Esquisses, staged by Turid Revfeim, in the NZSD 2025 Performance Season.</p>
+        </div>
+      </div>
+
+      <div id="artist-grace" style="background:#F2EEF4;padding:clamp(32px,4vw,56px) 0;display:flex;flex-wrap:wrap;align-items:flex-start;gap:clamp(24px,4vw,52px);scroll-margin-top:96px" data-reveal="1">
+        <div style="flex:1 1 300px;min-width:0;order:2">
+          <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(28px,3vw,38px);font-weight:400;margin:0 0 8px">Grace Ella</h2>
+          <div style="font-size:11.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#937B45;margin-bottom:22px">ANB Founder and Production Mentor</div>
+          <p style="font-size:15.5px;line-height:1.72;color:#4A4356;margin:0 0 16px;max-width:60ch">Grace Ella is a dance artist and choreographer from Aotearoa, New Zealand, who has worked internationally for the past three years. She graduated in 2022 with a Bachelor of Performing Arts (Screen Arts) from Unitec. During the initial phase of her career, she developed an award-winning Fringe performance, Quantum Tangerine. She also conducted a 6-week research process for Holding the Sun, a body of work that investigated unique architectural zones and volcanic topographies, particularly centred in Tāmaki Makaurau.</p>
+          <p style="font-size:15.5px;line-height:1.72;color:#4A4356;margin:0 0 16px;max-width:60ch">As a movement artist, Grace has had the pleasure of working and collaborating with practitioners across Aotearoa, Germany, London and Belgium and is part of the core production team for Te Wiki o Āhua Aotearoa. Grace’s journey into physical practice began with studying Architecture and Music Composition at Te Herenga Waka – Victoria University of Wellington, and slowly merged into the dance sphere.</p>
+          <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;line-height:1.55;color:#3D2B56;margin:0;max-width:52ch">Grace Ella explores the transfigured human, enhancing the delicate balance between care and physical overload. Through this process, she seeks to cultivate empathy in the viewer while shaping forms that appear unattainable, extending beyond the natural limits of human capability.</p>
+        </div>
+        <div style="width:min(100%,264px);aspect-ratio:4/5;flex-shrink:0;order:1;min-width:0;overflow:hidden"><image-slot id="artist-photo-grace" shape="rect" placeholder="Grace Ella — headshot"></image-slot></div>
+      </div>
+
+    </div>
+  </section>
+</main>
+</sc-if>
+
+<sc-if value="{{ isLeadership }}" hint-placeholder-val="{{ false }}">
+<main>
+  <section style="padding:clamp(56px,8vw,104px) clamp(20px,5vw,56px) clamp(32px,4vw,48px)">
+    <div style="max-width:1280px;margin:0 auto">
+      <div style="font-size:11.5px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#937B45;margin-bottom:20px">Who We Are</div>
+      <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(40px,6vw,76px);font-weight:400;line-height:1.05;margin:0 0 26px">ANB 2027 Leadership</h1>
+      <p style="font-size:17px;line-height:1.66;color:#4A4356;margin:0;max-width:52ch">Four of the five roles below are held by artists who dance with the company. Their biographies live on the Artists page.</p>
+    </div>
+  </section>
+  <section style="padding:0 clamp(20px,5vw,56px) clamp(56px,8vw,104px)">
+    <div style="max-width:1280px;margin:0 auto;border-top:1px solid rgba(61,43,86,0.14)">
+      <sc-for list="{{ leadership }}" as="l" hint-placeholder-count="5">
+        <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 32px;padding:clamp(22px,2.6vw,32px) 0;border-bottom:1px solid rgba(61,43,86,0.14)" data-reveal="1">
+          <div style="font-size:11.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#937B45;width:230px;flex-shrink:0">{{ l.role }}</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:clamp(24px,2.6vw,32px);font-weight:400;flex:1 1 240px">{{ l.name }}</div>
+          <sc-if value="{{ l.hasBio }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ l.go }}" style="background:none;border:none;cursor:pointer;padding:0;font-size:13px;font-weight:500;color:#3D2B56;border-bottom:1px solid rgba(61,43,86,0.4)" style-hover="color:#14111B;border-color:#14111B">Read biography</button>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+</main>
+</sc-if>
+
+<sc-if value="{{ isCollaborators }}" hint-placeholder-val="{{ false }}">
+<main>
+  <section style="padding:clamp(56px,8vw,104px) clamp(20px,5vw,56px) clamp(32px,4vw,48px)">
+    <div style="max-width:1280px;margin:0 auto">
+      <div style="font-size:11.5px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#937B45;margin-bottom:20px">Who We Are</div>
+      <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(40px,6vw,76px);font-weight:400;line-height:1.05;margin:0 0 26px">Artistic Collaborators</h1>
+      <p style="font-size:17px;line-height:1.66;color:#4A4356;margin:0;max-width:52ch">The people beyond the stage who shape how ANB’s work looks and sounds.</p>
+    </div>
+  </section>
+  <section style="padding:0 clamp(20px,5vw,56px) clamp(56px,8vw,104px)">
+    <div style="max-width:880px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:clamp(24px,3vw,40px)">
+      <div data-reveal="1">
+        <div style="aspect-ratio:4/5;margin-bottom:22px;min-width:0;overflow:hidden"><image-slot id="collab-photo-zara" shape="rect" placeholder="Zara Ridley — portrait"></image-slot></div>
+        <h2 style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:400;margin:0 0 8px">Zara Ridley</h2>
+        <div style="font-size:11.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#937B45">2026/7 Technician in Residence</div>
+      </div>
+      <div data-reveal="1">
+        <div style="position:relative;aspect-ratio:4/5;margin-bottom:22px;min-width:0;overflow:hidden;background:#14111B">
+          <div style="display:flex;width:100%;height:100%;transition:transform .6s cubic-bezier(.22,.61,.36,1);transform:translateX({{ kuliosOffset }})">
+            <div style="flex:0 0 100%;height:100%;min-width:0"><image-slot id="collab-photo-kulios" shape="rect" placeholder="Francesca Fong — Kulios Ensemble"></image-slot></div>
+            <div style="flex:0 0 100%;height:100%;min-width:0"><img src="./assets/kulios-joseph-harrop.jpg" alt="Joseph Harrop, violin, Kulios Ensemble" style="width:100%;height:100%;object-fit:cover;object-position:45% 35%;display:block"></div>
+            <div style="flex:0 0 100%;height:100%;min-width:0"><img src="./assets/kulios-sarah-spence.jpg" alt="Sarah Spence, cello, Kulios Ensemble" style="width:100%;height:100%;object-fit:cover;object-position:50% 30%;display:block"></div>
+            <div style="flex:0 0 100%;height:100%;min-width:0"><img src="./assets/kulios-peau-halapua.jpg" alt="Peau Halapua, Kulios Ensemble" style="width:100%;height:100%;object-fit:cover;object-position:52% 40%;display:block"></div>
+          </div>
+          <div style="position:absolute;left:0;right:0;bottom:0;padding:44px 16px 14px;background:linear-gradient(to top,rgba(20,17,27,0.78),rgba(20,17,27,0));display:flex;align-items:flex-end;justify-content:space-between;gap:12px;pointer-events:none">
+            <div style="font-size:12.5px;font-weight:500;letter-spacing:0.04em;color:#FBF9FC">{{ kuliosCaption }}</div>
+            <div style="display:flex;gap:6px;pointer-events:auto">
+              <button onClick="{{ kuliosPrev }}" aria-label="Previous photo" style="width:38px;height:38px;background:rgba(251,249,252,0.14);border:1px solid rgba(251,249,252,0.42);color:#FBF9FC;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px)" style-hover="background:#FBF9FC;color:#14111B">&#8592;</button>
+              <button onClick="{{ kuliosNext }}" aria-label="Next photo" style="width:38px;height:38px;background:rgba(251,249,252,0.14);border:1px solid rgba(251,249,252,0.42);color:#FBF9FC;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px)" style-hover="background:#FBF9FC;color:#14111B">&#8594;</button>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;margin:-10px 0 18px">
+          <sc-for list="{{ kuliosDots }}" as="d" hint-placeholder-count="3">
+            <button onClick="{{ d.go }}" aria-label="{{ d.label }}" style="width:{{ d.w }};height:3px;padding:0;border:none;cursor:pointer;background:{{ d.bg }};transition:width .3s,background .3s"></button>
+          </sc-for>
+        </div>
+        <h2 style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:400;margin:0 0 8px">Kulios Ensemble</h2>
+        <div style="font-size:11.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#937B45">2026/7 Musicians in Residence</div>
+      </div>
+    </div>
+  </section>
+</main>
+</sc-if>
+
+<sc-if value="{{ isProgrammes }}" hint-placeholder-val="{{ false }}">
+<main>
+  <section style="position:relative;min-height:min(58vh,520px);display:flex;align-items:flex-end;background:#14111B;overflow:hidden">
+    <div style="position:absolute;inset:0;overflow:hidden"><image-slot id="prog-hero" shape="rect" placeholder="Folklore key art — wide production image"></image-slot></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(20,17,27,0.86),rgba(20,17,27,0.2));pointer-events:none"></div>
+    <div style="position:relative;max-width:1280px;margin:0 auto;width:100%;padding:clamp(36px,5vw,72px) clamp(20px,5vw,56px)">
+      <div style="font-size:11.5px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#C9B27E;margin-bottom:18px">What We Do — Upcoming Programmes</div>
+      <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(44px,7vw,86px);font-weight:400;line-height:1;margin:0 0 18px;color:#FBF9FC">Folklore</h1>
+      <p style="font-size:clamp(15px,1.5vw,18px);line-height:1.6;color:rgba(251,249,252,0.9);margin:0;max-width:54ch">A ballet in two acts. Holy Trinity Cathedral, Parnell, with live accompaniment by the Kulios Ensemble.</p>
+    </div>
+  </section>
+
+  <section style="padding:clamp(56px,8vw,96px) clamp(20px,5vw,56px);border-bottom:1px solid rgba(61,43,86,0.14)">
+    <div style="max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:clamp(32px,5vw,72px)">
+      <div data-reveal="1">
+        <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(23px,2.6vw,32px);font-weight:300;line-height:1.34;margin:0 0 26px">Experience a brand new season of work from Auckland’s newest and only classical ballet collective.</p>
+        <p style="font-size:16px;line-height:1.72;color:#4A4356;margin:0">Folklore celebrates humanity’s enduring fascination with myth, fairytale and fable. This is ballet as you’ve never experienced it — up-close, immersive and intimate.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:1px;background:rgba(61,43,86,0.14);border:1px solid rgba(61,43,86,0.14)" data-reveal="1">
+        <div style="background:#FBF9FC;padding:clamp(24px,3vw,36px)">
+          <div style="font-size:11.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#937B45;margin-bottom:14px">Act One</div>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:400;margin:0 0 12px">Tales of the Past</h3>
+          <p style="font-size:15px;line-height:1.66;color:#4A4356;margin:0">A selection of exciting excerpts from the classical ballet repertoire including Giselle, Raymonda, Don Quixote, Swan Lake and more.</p>
+        </div>
+        <div style="background:#FBF9FC;padding:clamp(24px,3vw,36px)">
+          <div style="font-size:11.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#937B45;margin-bottom:14px">Act Two</div>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:400;margin:0 0 12px">Songs of Tomorrow</h3>
+          <p style="font-size:15px;line-height:1.66;color:#4A4356;margin:0">Three brand new neoclassical works choreographed by and for members of Auckland New Ballet.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:clamp(56px,8vw,96px) clamp(20px,5vw,56px);background:#FBF9FC;border-bottom:1px solid rgba(61,43,86,0.14)">
+    <div style="max-width:1280px;margin:0 auto">
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(30px,3.6vw,46px);font-weight:400;margin:0 0 clamp(28px,3.5vw,44px)" data-reveal="1">Upcoming performances</h2>
+      <div style="border-top:1px solid rgba(61,43,86,0.14)">
+        <sc-for list="{{ performances }}" as="p" hint-placeholder-count="3">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:16px clamp(20px,3vw,40px);padding:clamp(22px,2.6vw,30px) 0;border-bottom:1px solid rgba(61,43,86,0.14)" data-reveal="1">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:clamp(24px,2.4vw,30px);width:210px;flex-shrink:0">{{ p.date }}</div>
+            <div style="font-size:15px;font-weight:600;width:88px;flex-shrink:0">{{ p.time }}</div>
+            <div style="flex:1 1 220px;min-width:0">
+              <div style="font-size:14px;font-weight:600;margin-bottom:4px">{{ p.kind }}</div>
+              <div style="font-size:13.5px;color:#5D5568">{{ p.venue }}</div>
+            </div>
+            <a href="#tickets" style="background:#3D2B56;color:#F7F4F9;padding:13px 26px;font-size:12px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;white-space:nowrap" style-hover="background:#14111B;color:#F7F4F9;text-decoration:none">Buy Tickets</a>
+          </div>
+        </sc-for>
+      </div>
+      <sc-if value="{{ showGaps }}" hint-placeholder-val="{{ true }}">
+        <div style="margin-top:22px;display:inline-flex;border:1px dashed #937B45;padding:11px 16px;font-family:ui-monospace,monospace;font-size:11px;letter-spacing:0.04em;color:#7A6539;background:rgba(147,123,69,0.07);max-width:100%">CONTENT GAP — each ticket link points out to the box office holding that date. Provider not yet confirmed.</div>
+      </sc-if>
+    </div>
+  </section>
+
+  <section style="padding:clamp(56px,8vw,96px) clamp(20px,5vw,56px);border-bottom:1px solid rgba(61,43,86,0.14)">
+    <div style="max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:clamp(24px,3vw,48px)">
+      <div data-reveal="1">
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:clamp(26px,2.8vw,34px);font-weight:400;margin:0 0 16px">Quiet Matinee</h3>
+        <p style="font-size:15.5px;line-height:1.7;color:#4A4356;margin:0">A sensory-friendly, family-oriented experience with lower sound and lighting, and open doors for freedom to enter and exit throughout the performance.</p>
+      </div>
+      <div data-reveal="1">
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:clamp(26px,2.8vw,34px);font-weight:400;margin:0 0 16px">Post-show Q&amp;A</h3>
+        <p style="font-size:15.5px;line-height:1.7;color:#4A4356;margin:0">Each performance concludes with a Q&amp;A with the dancers onstage. This is your chance to ask anything you’ve ever wanted to know about ballet.</p>
+      </div>
+      <div data-reveal="1">
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:clamp(26px,2.8vw,34px);font-weight:400;margin:0 0 16px">Summer Regional Tour</h3>
+        <p style="font-size:15.5px;line-height:1.7;color:#4A4356;margin:0 0 18px">ANB brings Folklore to Waiheke Island, Whanganui, Tauranga and Kerikeri this summer. Keep an eye on our mailing list for dates and ticket info.</p>
+        <div style="display:inline-flex;font-size:11.5px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#937B45;border:1px solid rgba(147,123,69,0.5);padding:8px 14px">Dates to be announced</div>
+      </div>
+    </div>
+  </section>
+</main>
+</sc-if>
+
+<sc-if value="{{ isDonate }}" hint-placeholder-val="{{ false }}">
+<main>
+  <section style="padding:clamp(56px,8vw,104px) clamp(20px,5vw,56px) clamp(40px,5vw,64px)">
+    <div style="max-width:1280px;margin:0 auto">
+      <div style="font-size:11.5px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#937B45;margin-bottom:20px">Support ANB</div>
+      <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(40px,6vw,76px);font-weight:400;line-height:1.05;margin:0 0 30px;max-width:22ch">Ways to Donate</h1>
+      <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(22px,2.5vw,30px);font-weight:300;line-height:1.36;margin:0;max-width:44ch;color:#3D2B56">Auckland New Ballet began as a coffee shop dream — seven freelancers banding together to make art without any guarantee of pay.</p>
+    </div>
+  </section>
+
+  <section style="padding:0 clamp(20px,5vw,56px) clamp(56px,8vw,96px)">
+    <div style="max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:clamp(32px,5vw,72px);align-items:start">
+      <div data-reveal="1">
+        <div style="font-size:11.5px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#937B45;margin-bottom:18px">The Pointe Shoe Fund</div>
+        <p style="font-size:16px;line-height:1.72;color:#4A4356;margin:0 0 20px">In the fairytale The Twelve Dancing Princesses, a king is driven to despair by his twelve wayward daughters and their mysterious ability to wear out a pair of dancing shoes every night by daybreak. For a professional dancer, this is more than a fanciful story — it’s a costly reality.</p>
+        <p style="font-size:16px;line-height:1.72;color:#4A4356;margin:0 0 20px">Every pair of pointe shoes is hand-made and customised to the foot shape of each dancer. The custom fit is essential not only for performance but for supporting the delicate architecture of the foot and lower leg. Pointe shoes provide about fifteen hours of safe wear — a professional dancer may go through one to two pairs a month, or a week, at $130 to $250 per pair.</p>
+        <p style="font-size:16px;line-height:1.72;color:#4A4356;margin:0">Within a full-time company, shoes are provided. Our freelance dancers cover the cost out of pocket. In 2027, as we prepare to mount our first full season of work, that cost will exceed $7,000.</p>
+      </div>
+      <div style="aspect-ratio:4/5;min-height:320px;min-width:0;overflow:hidden" data-reveal="1"><image-slot id="donate-hero" shape="rect" placeholder="Pointe shoes, ribbons and elastic — still life"></image-slot></div>
+    </div>
+  </section>
+
+  <section style="padding:clamp(56px,8vw,96px) clamp(20px,5vw,56px);background:#FBF9FC;border-top:1px solid rgba(61,43,86,0.14);border-bottom:1px solid rgba(61,43,86,0.14)">
+    <div style="max-width:1280px;margin:0 auto">
+      <div style="text-align:center;margin-bottom:clamp(32px,4vw,52px)" data-reveal="1">
+        <div style="font-size:11.5px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#937B45;margin-bottom:16px">Every ribbon makes a difference</div>
+        <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(30px,3.6vw,46px);font-weight:400;margin:0 auto;max-width:26ch">Choose the gift that fits</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:1px;background:rgba(61,43,86,0.14);border:1px solid rgba(61,43,86,0.14)">
+        <sc-for list="{{ tiers }}" as="t" hint-placeholder-count="5">
+          <div style="background:#FBF9FC;padding:clamp(24px,2.6vw,32px);display:flex;flex-direction:column;gap:14px" style-hover="background:#F2EEF4" data-reveal="1">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:clamp(34px,3.4vw,44px);font-weight:400;line-height:1;color:#14111B">{{ t.amount }}</div>
+            <p style="font-size:14.5px;line-height:1.6;color:#4A4356;margin:0;flex:1">{{ t.text }}</p>
+            <a href="#donate" style="font-size:12px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#3D2B56;border-bottom:1px solid rgba(61,43,86,0.4);padding-bottom:5px;align-self:flex-start" style-hover="color:#14111B;border-color:#14111B;text-decoration:none">Give {{ t.amount }}</a>
+          </div>
+        </sc-for>
+      </div>
+      <p style="font-size:13px;color:#5D5568;margin:20px 0 0">*$675 supplies one dancer with pointe shoes for a month. Your generosity makes every step onto stage, and every relevé in rehearsal, possible.</p>
+    </div>
+  </section>
+
+  <section style="padding:clamp(56px,8vw,96px) clamp(20px,5vw,56px)">
+    <div style="max-width:760px;margin:0 auto;text-align:center" data-reveal="1">
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(28px,3.2vw,40px);font-weight:400;margin:0 0 18px">Sponsor us</h2>
+      <p style="font-size:16px;line-height:1.7;color:#4A4356;margin:0 0 30px">We have big plans for 2027, and we’re just getting started. If you are interested in partnering with Auckland New Ballet, contact us for a sponsorship proposal.</p>
+      <button onClick="{{ goContact }}" style="background:#3D2B56;color:#F7F4F9;border:none;padding:16px 34px;font-size:12.5px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer" style-hover="background:#14111B">Request a proposal</button>
+    </div>
+  </section>
+</main>
+</sc-if>
+
+<sc-if value="{{ isSponsors }}" hint-placeholder-val="{{ false }}">
+<main>
+  <section style="padding:clamp(56px,8vw,104px) clamp(20px,5vw,56px) clamp(32px,4vw,48px)">
+    <div style="max-width:1280px;margin:0 auto">
+      <div style="font-size:11.5px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#937B45;margin-bottom:20px">Support ANB</div>
+      <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(40px,6vw,76px);font-weight:400;line-height:1.05;margin:0 0 26px">Current Sponsors</h1>
+      <p style="font-size:17px;line-height:1.66;color:#4A4356;margin:0;max-width:52ch">Auckland New Ballet exists because of the people and organisations who backed a company that did not exist yet.</p>
+    </div>
+  </section>
+  <section style="padding:0 clamp(20px,5vw,56px) clamp(48px,6vw,80px)">
+    <div style="max-width:1280px;margin:0 auto">
+      <div style="display:flex;flex-wrap:wrap;gap:16px" data-reveal="1">
+        <div style="width:min(100%,232px);height:120px;border:1px dashed rgba(61,43,86,0.28);display:flex;align-items:center;justify-content:center;padding:16px;text-align:center;font-family:ui-monospace,monospace;font-size:11px;letter-spacing:0.04em;color:#6B5580">LOGO — M. D. Fotti</div>
+        <div style="width:min(100%,232px);height:120px;display:flex;align-items:center;justify-content:center;padding:12px 18px">
+          <img src="./assets/family-office-advisory.png" alt="Family Office Advisory Ltd" style="max-width:100%;max-height:100%;object-fit:contain;display:block;mix-blend-mode:multiply">
+        </div>
+        <div style="width:min(100%,232px);height:120px;display:flex;align-items:center;justify-content:center;padding:12px 18px">
+          <img src="./assets/pure-dance.png" alt="Pure Dance" style="max-width:100%;max-height:100%;object-fit:contain;display:block;mix-blend-mode:multiply">
+        </div>
+        <div style="width:min(100%,232px);height:120px;display:flex;align-items:center;justify-content:center;padding:12px 18px">
+          <img src="./assets/erin-bowerman.svg" alt="Erin Bowerman Strength and Conditioning" style="max-width:100%;max-height:100%;object-fit:contain;display:block">
+        </div>
+      </div>
+    </div>
+  </section>
+  <section style="padding:0 clamp(20px,5vw,56px) clamp(48px,6vw,80px)">
+    <div style="max-width:1280px;margin:0 auto;border-top:1px solid rgba(61,43,86,0.14);padding-top:clamp(32px,4vw,52px)" data-reveal="1">
+      <p style="font-size:16px;line-height:1.7;color:#4A4356;margin:0 0 26px;max-width:56ch">In 2026 Auckland New Ballet has been fortunate to receive additional funding and assistance from:</p>
+      <div style="display:flex;flex-wrap:wrap;gap:16px">
+        <div style="width:min(100%,232px);height:120px;display:flex;align-items:center;justify-content:center;padding:12px 18px">
+          <img src="./assets/wellesley-studios.svg" alt="Wellesley Studios" style="max-width:100%;max-height:100%;object-fit:contain;display:block">
+        </div>
+        <a href="https://www.aucklandcouncil.govt.nz/" style="width:min(100%,232px);height:120px;display:flex;align-items:center;justify-content:center;padding:14px 18px" style-hover="opacity:0.62;text-decoration:none">
+          <img src="./assets/auckland-council.svg" alt="Auckland Council" style="max-width:100%;max-height:100%;object-fit:contain;display:block">
+        </a>
+      </div>
+    </div>
+  </section>
+  <section style="padding:clamp(48px,7vw,88px) clamp(20px,5vw,56px);background:#FBF9FC;border-top:1px solid rgba(61,43,86,0.14)">
+    <div style="max-width:1280px;margin:0 auto">
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(28px,3.2vw,40px);font-weight:400;margin:0 0 10px" data-reveal="1">With thanks to our major 2026 donors</h2>
+      <div style="width:56px;height:1px;background:#937B45;margin:0 0 clamp(28px,3.5vw,44px)"></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:1px;background:rgba(61,43,86,0.14);border:1px solid rgba(61,43,86,0.14)">
+        <sc-for list="{{ donors }}" as="d" hint-placeholder-count="8">
+          <div style="background:#FBF9FC;padding:22px clamp(18px,2vw,28px);font-family:'Cormorant Garamond',serif;font-size:21px;color:#14111B" data-reveal="1">{{ d }}</div>
+        </sc-for>
+      </div>
+      <sc-if value="{{ showGaps }}" hint-placeholder-val="{{ true }}">
+        <div style="margin-top:24px;display:inline-flex;border:1px dashed #937B45;padding:11px 16px;font-family:ui-monospace,monospace;font-size:11px;letter-spacing:0.04em;color:#7A6539;background:rgba(147,123,69,0.07);max-width:100%">CONTENT GAP — each named donor needs written consent before public listing</div>
+      </sc-if>
+    </div>
+  </section>
+</main>
+</sc-if>
+
+<sc-if value="{{ isContact }}" hint-placeholder-val="{{ false }}">
+<main>
+  <section style="padding:clamp(56px,8vw,104px) clamp(20px,5vw,56px) clamp(56px,8vw,104px)">
+    <div style="max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:clamp(32px,5vw,72px)">
+      <div>
+        <div style="font-size:11.5px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#937B45;margin-bottom:20px">Get in Touch</div>
+        <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(40px,6vw,76px);font-weight:400;line-height:1.05;margin:0 0 34px">Contact Us</h1>
+        <div style="border-top:1px solid rgba(61,43,86,0.14)">
+          <div style="padding:22px 0;border-bottom:1px solid rgba(61,43,86,0.14)">
+            <div style="font-size:11.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#937B45;margin-bottom:10px">Email</div>
+            <a href="mailto:aucklandnewballet@gmail.com" style="font-family:'Cormorant Garamond',serif;font-size:clamp(22px,2.4vw,28px);color:#14111B" style-hover="color:#3D2B56">aucklandnewballet@gmail.com</a>
+          </div>
+          <div style="padding:22px 0;border-bottom:1px solid rgba(61,43,86,0.14)">
+            <div style="font-size:11.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#937B45;margin-bottom:10px">Instagram</div>
+            <a href="https://instagram.com/aucklandnewballet" style="font-family:'Cormorant Garamond',serif;font-size:clamp(22px,2.4vw,28px);color:#14111B" style-hover="color:#3D2B56">@aucklandnewballet</a>
+          </div>
+          <div style="padding:22px 0;border-bottom:1px solid rgba(61,43,86,0.14)">
+            <div style="font-size:11.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#937B45;margin-bottom:10px">Facebook</div>
+            <a href="https://facebook.com" style="font-family:'Cormorant Garamond',serif;font-size:clamp(22px,2.4vw,28px);color:#14111B" style-hover="color:#3D2B56">Auckland New Ballet</a>
+          </div>
+        </div>
+      </div>
+      <div style="background:#FBF9FC;border:1px solid rgba(61,43,86,0.14);padding:clamp(28px,3.5vw,44px);align-self:start">
+        <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(26px,2.8vw,34px);font-weight:400;margin:0 0 14px">Join ANB’s email list</h2>
+        <p style="font-size:15px;line-height:1.66;color:#4A4356;margin:0 0 26px">Season announcements, regional tour dates and ticket releases, a few times a year.</p>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <input type="text" placeholder="Your name" style="width:100%;padding:15px 16px;border:1px solid rgba(61,43,86,0.28);background:#F2EEF4;font-size:15px;color:#14111B;font-family:inherit">
+          <input type="email" placeholder="Email address" style="width:100%;padding:15px 16px;border:1px solid rgba(61,43,86,0.28);background:#F2EEF4;font-size:15px;color:#14111B;font-family:inherit">
+          <button style="background:#3D2B56;color:#F7F4F9;border:none;padding:16px;font-size:12.5px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;margin-top:4px" style-hover="background:#14111B">Subscribe</button>
+        </div>
+        <sc-if value="{{ showGaps }}" hint-placeholder-val="{{ true }}">
+          <div style="margin-top:22px;border:1px dashed #937B45;padding:11px 14px;font-family:ui-monospace,monospace;font-size:11px;line-height:1.5;color:#7A6539;background:rgba(147,123,69,0.07)">CONTENT GAP — mailing list tool not yet chosen (Wix Contacts vs. third-party embed)</div>
+        </sc-if>
+      </div>
+    </div>
+  </section>
+</main>
+</sc-if>
+
+<footer style="color: #FBF9FC; padding: clamp(48px,7vw,88px) clamp(20px,5vw,56px) 36px; background-color: #00233D">
+  <div style="max-width:1280px;margin:0 auto">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:clamp(32px,4vw,56px);padding-bottom:clamp(36px,4vw,56px);border-bottom:1px solid rgba(251,249,252,0.16)">
+      <div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:500;letter-spacing:0.22em;line-height:1">ANB</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:12px;letter-spacing:0.17em;text-transform:uppercase;color:rgba(251,249,252,0.72);margin-top:5px">Auckland New Ballet</div>
+        <p style="font-size:14px;line-height:1.6;color:rgba(251,249,252,0.72);margin:22px 0 0;max-width:30ch">Tāmaki Makaurau’s newest and only collective of professional ballet artists.</p>
+      </div>
+      <sc-for list="{{ navGroups }}" as="g" hint-placeholder-count="4">
+        <sc-if value="{{ g.hasChildren }}" hint-placeholder-val="{{ true }}">
+          <div>
+            <div style="font-size:11.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#C9B27E;margin-bottom:18px">{{ g.label }}</div>
+            <div style="display:flex;flex-direction:column;gap:11px;align-items:flex-start">
+              <sc-for list="{{ g.children }}" as="c" hint-placeholder-count="3">
+                <button onClick="{{ c.go }}" style="background:none;border:none;padding:0;cursor:pointer;font-size:14px;color:rgba(251,249,252,0.8);text-align:left" style-hover="color:#FBF9FC">{{ c.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+      </sc-for>
+      <div>
+        <div style="font-size:11.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#C9B27E;margin-bottom:18px">Stay in touch</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px">
+          <input type="email" placeholder="Email address" style="flex:1 1 150px;min-width:0;padding:13px 14px;border:1px solid rgba(251,249,252,0.26);background:rgba(251,249,252,0.06);font-size:14px;color:#FBF9FC;font-family:inherit">
+          <button style="background:#FBF9FC;color:#14111B;border:none;padding:13px 20px;font-size:11.5px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer" style-hover="background:#C9B27E">Join</button>
+        </div>
+        <div style="display:flex;gap:18px;margin-bottom:26px">
+          <a href="https://instagram.com/aucklandnewballet" style="font-size:13.5px;color:rgba(251,249,252,0.8)" style-hover="color:#C9B27E">Instagram</a>
+          <a href="https://facebook.com" style="font-size:13.5px;color:rgba(251,249,252,0.8)" style-hover="color:#C9B27E">Facebook</a>
+        </div>
+        <button onClick="{{ goDonate }}" style="background:none;border:1px solid rgba(251,249,252,0.4);color:#FBF9FC;padding:14px 28px;font-size:12px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer" style-hover="background:#FBF9FC;color:#14111B">Donate</button>
+      </div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-between;padding-top:26px;font-size:12.5px;color:rgba(251,249,252,0.56)">
+      <div>© 2026 Auckland New Ballet. All rights reserved.</div>
+      <div>Proof of concept — structure, copy and look-and-feel for approval.</div>
+    </div>
+  </div>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;tierOrder&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;ascending&quot;,&quot;lead-with-largest&quot;,&quot;feature-pointe-shoes&quot;],&quot;default&quot;:&quot;ascending&quot;,&quot;tsType&quot;:&quot;'ascending' | 'lead-with-largest' | 'feature-pointe-shoes'&quot;,&quot;section&quot;:&quot;Donations&quot;},&quot;showContentGaps&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Review&quot;}}">
+class Component extends DCLogic {
+  state = { page: 'home', menu: null, heroPlaying: true, compact: false, drawer: false };
+
+  componentDidMount() {
+    this.onResize = () => {
+      const compact = window.innerWidth < 1120;
+      if (compact !== this.state.compact) this.setState({ compact, drawer: false, menu: null });
+    };
+    this.onResize();
+    window.addEventListener('resize', this.onResize);
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      this.reduced = true;
+      this.setState({ heroPlaying: false });
+    }
+    this.observe();
+  }
+  componentDidUpdate() { this.observe(); }
+
+  observe() {
+    if (this.reduced) return;
+    if (!this.io) {
+      this.io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.style.opacity = '1';
+            e.target.style.transform = 'none';
+            this.io.unobserve(e.target);
+          }
+        });
+      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.04 });
+    }
+    requestAnimationFrame(() => {
+      document.querySelectorAll('[data-reveal]:not([data-revealed])').forEach((el) => {
+        el.setAttribute('data-revealed', '1');
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(18px)';
+        el.style.transition = 'opacity .8s cubic-bezier(.22,.61,.36,1), transform .8s cubic-bezier(.22,.61,.36,1)';
+        this.io.observe(el);
+      });
+    });
+  }
+
+  componentWillUnmount() { window.removeEventListener('resize', this.onResize); }
+
+  nav(page) {
+    return () => {
+      this.setState({ page, menu: null, drawer: false });
+      window.scrollTo(0, 0);
+    };
+  }
+
+  renderVals() {
+    const p = this.state.page;
+    const groups = [
+      { key: 'home', label: 'Home', children: [] },
+      { key: 'about', label: 'Who We Are', children: [
+        { key: 'about', label: 'About Us' },
+        { key: 'artists', label: 'ANB Artists' },
+        { key: 'leadership', label: 'ANB 2027 Leadership' },
+        { key: 'collaborators', label: 'Artistic Collaborators' }
+      ] },
+      { key: 'programmes', label: 'What We Do', children: [
+        { key: 'programmes', label: 'Upcoming Programmes' }
+      ] },
+      { key: 'donate', label: 'Support ANB', children: [
+        { key: 'donate', label: 'Ways to Donate' },
+        { key: 'sponsors', label: 'Current Sponsors' }
+      ] },
+      { key: 'contact', label: 'Get in Touch', children: [] }
+    ];
+
+    const order = this.props.tierOrder || 'ascending';
+    const base = [
+      { amount: '$40', text: 'Covers a pair of ballet flats.' },
+      { amount: '$90', text: 'Supports a pair of men\u2019s boots.' },
+      { amount: '$135', text: 'Provides a pair of custom pointe shoes.' },
+      { amount: '$675', text: 'Supplies one dancer with pointe shoes for a month.*' },
+      { amount: '$2,000', text: 'Supplies every ANB dancer with pointe shoes, ribbons and elastic for a seasonal performance.' }
+    ];
+    let tiers = base;
+    if (order === 'lead-with-largest') tiers = base.slice().reverse();
+    if (order === 'feature-pointe-shoes') tiers = [base[2], base[0], base[1], base[3], base[4]];
+
+    return {
+      navGroups: groups.map((g) => ({
+        label: g.label,
+        hasChildren: g.children.length > 0,
+        isOpen: this.state.menu === g.key && g.children.length > 0,
+        onEnter: () => this.setState({ menu: g.key }),
+        go: this.nav(g.key),
+        children: g.children.map((c) => ({ label: c.label, go: this.nav(c.key) }))
+      })),
+      closeMenu: () => this.setState({ menu: null }),
+      ...(() => {
+        const caps = ['Francesca Fong', 'Joseph Harrop \u2014 violin', 'Sarah Spence \u2014 cello', 'Peau Halapua'];
+        const i = this.state.kulios || 0;
+        const go = (n) => () => this.setState({ kulios: (n + caps.length) % caps.length });
+        return {
+          kuliosOffset: `-${i * 100}%`,
+          kuliosCaption: caps[i],
+          kuliosPrev: go(i - 1),
+          kuliosNext: go(i + 1),
+          kuliosDots: caps.map((c, n) => ({ go: go(n), label: `Show ${c}`, w: n === i ? '28px' : '12px', bg: n === i ? '#3D2B56' : 'rgba(61,43,86,0.25)' }))
+        };
+      })(),
+      isWide: !this.state.compact,
+      isCompact: this.state.compact,
+      drawerOpen: this.state.compact && this.state.drawer,
+      toggleDrawer: () => this.setState((s) => ({ drawer: !s.drawer })),
+      drawerLabel: this.state.drawer ? 'Close' : 'Menu',
+      flatNav: [
+        { label: 'Home', go: this.nav('home') },
+        { label: 'About Us', go: this.nav('about') },
+        { label: 'ANB Artists', go: this.nav('artists') },
+        { label: 'ANB 2027 Leadership', go: this.nav('leadership') },
+        { label: 'Artistic Collaborators', go: this.nav('collaborators') },
+        { label: 'Upcoming Programmes', go: this.nav('programmes') },
+        { label: 'Ways to Donate', go: this.nav('donate') },
+        { label: 'Current Sponsors', go: this.nav('sponsors') },
+        { label: 'Get in Touch', go: this.nav('contact') }
+      ],
+      goHome: this.nav('home'),
+      goProgrammes: this.nav('programmes'),
+      goDonate: this.nav('donate'),
+      goContact: this.nav('contact'),
+      isHome: p === 'home',
+      isAbout: p === 'about',
+      isArtists: p === 'artists',
+      isLeadership: p === 'leadership',
+      isCollaborators: p === 'collaborators',
+      isProgrammes: p === 'programmes',
+      isDonate: p === 'donate',
+      isSponsors: p === 'sponsors',
+      isContact: p === 'contact',
+      showGaps: this.props.showContentGaps !== false,
+      heroVideo: !this.reduced,
+      heroRef: (el) => { this.hero = el; },
+      toggleHero: () => {
+        const next = !this.state.heroPlaying;
+        this.setState({ heroPlaying: next });
+        if (this.hero && this.hero.contentWindow) {
+          this.hero.contentWindow.postMessage(JSON.stringify({
+            event: 'command', func: next ? 'playVideo' : 'pauseVideo', args: []
+          }), '*');
+        }
+      },
+      heroLabel: this.state.heroPlaying ? 'Pause' : 'Play',
+      heroNote: this.reduced ? 'reduced motion \u2014 static poster' : (this.state.heroPlaying ? 'muted showreel \u2014 no captions needed' : 'paused'),
+      tiers,
+      principles: [
+        { num: '01', text: 'We believe compelling art lies at the intersection of storytelling and rigorous technical skill.' },
+        { num: '02', text: 'We believe in the enduring power of dance to communicate emotion, uplift and inspire.' },
+        { num: '03', text: 'We celebrate the profound history and generational knowledge passed down within the language of classical ballet.' },
+        { num: '04', text: 'We believe ballet is for all and should be accessible and welcoming, financially and intellectually.' },
+        { num: '05', text: 'We use the choreographic language of classical ballet to tell new and contemporary stories, affirming it as a living art in Aotearoa.' },
+        { num: '06', text: 'We celebrate the cultural fabric and taonga tuku iho of Aotearoa, and let it direct our programming, marketing and staging.' }
+      ],
+      leadership: [
+        { role: 'Creative Director', name: 'Madison Fotti-Knowles', hasBio: true, go: this.nav('artists') },
+        { role: 'Producer', name: 'Zoe White', hasBio: true, go: this.nav('artists') },
+        { role: 'Support Producer', name: 'Isabella Guyan', hasBio: true, go: this.nav('artists') },
+        { role: 'Rehearsal Director', name: 'Meaghan Rowe', hasBio: false, go: this.nav('artists') },
+        { role: 'Social Media Manager', name: 'Amelia Chandulal-Mackay', hasBio: true, go: this.nav('artists') }
+      ],
+      performances: [
+        { date: 'Thursday 18 Sept', time: '7.00pm', kind: 'Evening performance', venue: 'Holy Trinity Cathedral, Parnell' },
+        { date: 'Friday 19 Sept', time: '1.00pm', kind: 'Quiet Matinee \u2014 sensory-friendly', venue: 'Holy Trinity Cathedral, Parnell' },
+        { date: 'Friday 19 Sept', time: '6.00pm', kind: 'Evening performance', venue: 'Holy Trinity Cathedral, Parnell' }
+      ],
+      donors: ['Hamish Mackay', 'Doug and Marianne Cooper', 'Kelly Knowles', 'Sarah Lewis', 'Seb Heath', 'Leanne Mear', 'Sarah-Jane Morgan', 'Peter Guyan']
+    };
+  }
+}
+</script>
+</body>
+</html>
