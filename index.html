@@ -4,7 +4,7 @@
   // 404.html sends deep links (e.g. /artists) here as /?p=/artists; put the real address back.
   (function () {
     var p = new URLSearchParams(location.search).get('p');
-    if (p) history.replaceState(null, '', p.replace(/\/+$/, '') + location.hash);
+    if (p) history.replaceState(null, '', p + location.hash);
   })();
 </script>
 <title>Auckland New Ballet</title>
@@ -1064,12 +1064,13 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script="" data-props="{&quot;tierOrder&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;ascending&quot;,&quot;lead-with-largest&quot;,&quot;feature-pointe-shoes&quot;],&quot;default&quot;:&quot;ascending&quot;,&quot;tsType&quot;:&quot;'ascending' | 'lead-with-largest' | 'feature-pointe-shoes'&quot;,&quot;section&quot;:&quot;Donations&quot;},&quot;showContentGaps&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Review&quot;}}">
 class Component extends DCLogic {
-  static ROUTES = { home: '/', about: '/about', artists: '/artists', leadership: '/leadership', collaborators: '/collaborators', programmes: '/programmes', donate: '/donate', sponsors: '/sponsors', contact: '/contact' };
-  static TITLES = { home: 'Auckland New Ballet', about: 'About Us', artists: 'ANB Artists', leadership: 'ANB 2027 Leadership', collaborators: 'Artistic Collaborators', programmes: 'Upcoming Programmes', donate: 'Ways to Donate', sponsors: 'Current Sponsors', contact: 'Get in Touch' };
+  // Each address is also a real page, built by tools/build_site.py (keep the two lists in step).
+  static ROUTES = { home: '/', about: '/about/', artists: '/artists/', leadership: '/leadership/', collaborators: '/collaborators/', programmes: '/programmes/', donate: '/donate/', sponsors: '/sponsors/', contact: '/contact/' };
+  static TITLES = { home: 'Auckland New Ballet', about: 'About Us', artists: 'ANB Artists', leadership: 'ANB 2027 Leadership', collaborators: 'Artistic Collaborators', programmes: 'Folklore: Upcoming Programmes', donate: 'Ways to Donate', sponsors: 'Current Sponsors', contact: 'Get in Touch' };
 
   static pageFromPath(path) {
-    const clean = path.replace(/\/+$/, '') || '/';
-    return Object.keys(this.ROUTES).find((k) => this.ROUTES[k] === clean) || null;
+    const strip = (x) => x.replace(/(index\.html)?\/*$/, '');
+    return Object.keys(this.ROUTES).find((k) => strip(this.ROUTES[k]) === strip(path)) || null;
   }
 
   state = { page: this.constructor.pageFromPath(location.pathname) || 'home', menu: null, heroPlaying: true, compact: false, drawer: false };
@@ -1133,7 +1134,7 @@ class Component extends DCLogic {
   // Each page has its own address (/artists, /artists#artist-zoe); Back and Forward move between them.
   startRouting() {
     const C = this.constructor;
-    if (!C.pageFromPath(location.pathname)) history.replaceState(null, '', '/' + location.hash);
+    if (location.pathname !== C.ROUTES[this.state.page]) history.replaceState(null, '', C.ROUTES[this.state.page] + location.hash);
     this.setTitle(this.state.page);
     if (location.hash) this.scrollToAnchor(decodeURIComponent(location.hash.slice(1)));
     this.onPop = () => {
