@@ -50,7 +50,7 @@ PAGES = {
 }
 
 # What gets published. Source material (assets/, uploads/, video/, archive/, docs/) stays private.
-COPY = ['static', 'CNAME', '404.html']
+COPY = ['static', 'CNAME', '404.html', 'favicon.ico']
 
 
 def check_routes(src):

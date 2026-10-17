@@ -8,6 +8,9 @@
   })();
 </script>
 <title>Auckland New Ballet</title>
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" href="/static/img/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
 <script>window.__resources = {"https://unpkg.com/react@18.3.1/umd/react.production.min.js": "/static/js/react.production.min.js", "https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js": "/static/js/react-dom.production.min.js"};</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -1062,7 +1065,7 @@
 
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script="" data-props="{&quot;tierOrder&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;ascending&quot;,&quot;lead-with-largest&quot;,&quot;feature-pointe-shoes&quot;],&quot;default&quot;:&quot;ascending&quot;,&quot;tsType&quot;:&quot;'ascending' | 'lead-with-largest' | 'feature-pointe-shoes'&quot;,&quot;section&quot;:&quot;Donations&quot;},&quot;showContentGaps&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Review&quot;}}">
+<script type="text/x-dc" data-dc-script="" data-props="{&quot;tierOrder&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;ascending&quot;,&quot;lead-with-largest&quot;,&quot;feature-pointe-shoes&quot;],&quot;default&quot;:&quot;ascending&quot;,&quot;tsType&quot;:&quot;'ascending' | 'lead-with-largest' | 'feature-pointe-shoes'&quot;,&quot;section&quot;:&quot;Donations&quot;},&quot;showContentGaps&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Review&quot;}}">
 class Component extends DCLogic {
   // Each address is also a real page, built by tools/build_site.py (keep the two lists in step).
   static ROUTES = { home: '/', about: '/about/', artists: '/artists/', leadership: '/leadership/', collaborators: '/collaborators/', programmes: '/programmes/', donate: '/donate/', sponsors: '/sponsors/', contact: '/contact/' };
@@ -1261,7 +1264,7 @@ class Component extends DCLogic {
       isDonate: p === 'donate',
       isSponsors: p === 'sponsors',
       isContact: p === 'contact',
-      showGaps: this.props.showContentGaps !== false,
+      showGaps: this.props.showContentGaps === true,
       heroVideo: !this.reduced,
       heroRef: this.heroRef,
       heroEnded: (e) => { if (this.state.heroPlaying) { const v = e.currentTarget; v.currentTime = 0; v.play().catch(() => {}); } },
