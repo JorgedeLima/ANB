@@ -1110,10 +1110,17 @@ class Component extends DCLogic {
 
   componentWillUnmount() { window.removeEventListener('resize', this.onResize); }
 
-  nav(page) {
+  nav(page, anchor) {
     return () => {
       this.setState({ page, menu: null, drawer: false });
       window.scrollTo(0, 0);
+      if (anchor) {
+        // Wait for the new page to render, then jump to the section.
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          const el = document.getElementById(anchor);
+          if (el) el.scrollIntoView({ block: 'start' });
+        }));
+      }
     };
   }
 
@@ -1218,11 +1225,11 @@ class Component extends DCLogic {
         { num: '06', text: 'We celebrate the cultural fabric and taonga tuku iho of Aotearoa, and let it direct our programming, marketing and staging.' }
       ],
       leadership: [
-        { role: 'Creative Director', name: 'Madison Fotti-Knowles', hasBio: true, go: this.nav('artists') },
-        { role: 'Producer', name: 'Zoe White', hasBio: true, go: this.nav('artists') },
-        { role: 'Support Producer', name: 'Isabella Guyan', hasBio: true, go: this.nav('artists') },
+        { role: 'Creative Director', name: 'Madison Fotti-Knowles', hasBio: true, go: this.nav('artists', 'artist-madison') },
+        { role: 'Producer', name: 'Zoe White', hasBio: true, go: this.nav('artists', 'artist-zoe') },
+        { role: 'Support Producer', name: 'Isabella Guyan', hasBio: true, go: this.nav('artists', 'artist-isabella') },
         { role: 'Rehearsal Director', name: 'Meaghan Rowe', hasBio: false, hasInline: true, isOpen: !!this.state.meaghanOpen, openStr: this.state.meaghanOpen ? 'true' : 'false', toggleLabel: this.state.meaghanOpen ? 'Close biography' : 'Read biography', toggle: () => this.setState((s) => ({ meaghanOpen: !s.meaghanOpen })), go: this.nav('artists') },
-        { role: 'Social Media Manager', name: 'Amelia Chandulal-Mackay', hasBio: true, go: this.nav('artists') }
+        { role: 'Social Media Manager', name: 'Amelia Chandulal-Mackay', hasBio: true, go: this.nav('artists', 'artist-amelia') }
       ],
       donors: ['Hamish Mackay', 'Doug and Marianne Cooper', 'Kelly Knowles', 'Sarah Lewis', 'Seb Heath', 'Leanne Mear', 'Sarah-Jane Morgan', 'Peter Guyan']
     };
