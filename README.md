@@ -17,6 +17,7 @@ Live at https://www.aucklandnewballet.co.nz. Every push to `main` runs `.github/
 | `404.html` | Fallback for unknown addresses: hands them to the site, which opens the home page. |
 | `tools/build_site.py` | Builds the published site: a copy of `index.html` at each page address with its own title, description and share tags, plus `sitemap.xml` and `robots.txt`. Edit page titles and descriptions here. |
 | `.github/workflows/pages.yml` | Runs the build and publishes on every push to `main`. |
+| `tools/mailing-list/` | Google Apps Script that saves sign-ups to a Google Sheet, with setup and sending notes. Not published. |
 | `assets/`, `uploads/`, `video/` | Original source material from the client. Not published. |
 | `docs/` | Site structure and the Claude Design handoff brief. |
 | `archive/claude-design/` | The last Claude Design source and export notes, kept for reference. Not published. |

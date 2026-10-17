@@ -1009,14 +1009,14 @@
       <div style="background:#FBF9FC;border:1px solid rgba(61,43,86,0.14);padding:clamp(28px,3.5vw,44px);align-self:start">
         <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(26px,2.8vw,34px);font-weight:400;margin:0 0 14px">Join ANB’s email list</h2>
         <p style="font-size:15px;line-height:1.66;color:#4A4356;margin:0 0 26px">Season announcements, regional tour dates and ticket releases, a few times a year.</p>
-        <div style="display:flex;flex-direction:column;gap:12px">
-          <input type="text" placeholder="Your name" style="width:100%;padding:15px 16px;border:1px solid rgba(61,43,86,0.28);background:#F2EEF4;font-size:15px;color:#14111B;font-family:inherit">
-          <input type="email" placeholder="Email address" style="width:100%;padding:15px 16px;border:1px solid rgba(61,43,86,0.28);background:#F2EEF4;font-size:15px;color:#14111B;font-family:inherit">
-          <button style="background:#3D2B56;color:#F7F4F9;border:none;padding:16px;font-size:12.5px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;margin-top:4px" style-hover="background:#14111B">Subscribe</button>
-        </div>
-        <sc-if value="{{ showGaps }}" hint-placeholder-val="{{ true }}">
-          <div style="margin-top:22px;border:1px dashed #937B45;padding:11px 14px;font-family:ui-monospace,monospace;font-size:11px;line-height:1.5;color:#7A6539;background:rgba(147,123,69,0.07)">CONTENT GAP — mailing list tool not yet chosen (Wix Contacts vs. third-party embed)</div>
-        </sc-if>
+        <form data-source="contact" sc-camel-on-submit="{{ subscribe }}" style="position:relative;display:flex;flex-direction:column;gap:12px">
+          <input type="text" name="name" placeholder="Your name" autocomplete="name" aria-label="Your name" style="width:100%;padding:15px 16px;border:1px solid rgba(61,43,86,0.28);background:#F2EEF4;font-size:15px;color:#14111B;font-family:inherit">
+          <input type="email" name="email" required placeholder="Email address" autocomplete="email" aria-label="Email address" style="width:100%;padding:15px 16px;border:1px solid rgba(61,43,86,0.28);background:#F2EEF4;font-size:15px;color:#14111B;font-family:inherit">
+          <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+          <button type="submit" style="background:#3D2B56;color:#F7F4F9;border:none;padding:16px;font-size:12.5px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;margin-top:4px" style-hover="background:#14111B">{{ contactBtn }}</button>
+        </form>
+        <div aria-live="polite" style="font-size:14px;line-height:1.5;color:#3D2B56;margin-top:14px">{{ contactMsg }}</div>
+        <p style="font-size:12.5px;line-height:1.55;color:#5D5568;margin:14px 0 0">We only use your email to send ANB news. To unsubscribe, reply to any of our emails.</p>
       </div>
     </div>
   </section>
@@ -1045,10 +1045,12 @@
       </sc-for>
       <div>
         <div style="font-size:11.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#C9B27E;margin-bottom:18px">Stay in touch</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px">
-          <input type="email" placeholder="Email address" style="flex:1 1 150px;min-width:0;padding:13px 14px;border:1px solid rgba(251,249,252,0.26);background:rgba(251,249,252,0.06);font-size:14px;color:#FBF9FC;font-family:inherit">
-          <button style="background:#FBF9FC;color:#14111B;border:none;padding:13px 20px;font-size:11.5px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer" style-hover="background:#C9B27E">Join</button>
-        </div>
+        <form data-source="footer" sc-camel-on-submit="{{ subscribe }}" style="position:relative;display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+          <input type="email" name="email" required placeholder="Email address" autocomplete="email" aria-label="Email address" style="flex:1 1 150px;min-width:0;padding:13px 14px;border:1px solid rgba(251,249,252,0.26);background:rgba(251,249,252,0.06);font-size:14px;color:#FBF9FC;font-family:inherit">
+          <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+          <button type="submit" style="background:#FBF9FC;color:#14111B;border:none;padding:13px 20px;font-size:11.5px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer" style-hover="background:#C9B27E">{{ footerBtn }}</button>
+        </form>
+        <div aria-live="polite" style="font-size:13px;line-height:1.5;color:#C9B27E;margin-bottom:22px;min-height:1px">{{ footerMsg }}</div>
         <div style="display:flex;gap:18px;margin-bottom:26px">
           <a href="https://instagram.com/aucklandnewballet" style="font-size:13.5px;color:rgba(251,249,252,0.8)" style-hover="color:#C9B27E">Instagram</a>
           <a href="https://facebook.com" style="font-size:13.5px;color:rgba(251,249,252,0.8)" style-hover="color:#C9B27E">Facebook</a>
@@ -1076,7 +1078,42 @@ class Component extends DCLogic {
     return Object.keys(this.ROUTES).find((k) => strip(this.ROUTES[k]) === strip(path)) || null;
   }
 
-  state = { page: this.constructor.pageFromPath(location.pathname) || 'home', menu: null, heroPlaying: true, compact: false, drawer: false };
+  state = { page: this.constructor.pageFromPath(location.pathname) || 'home', menu: null, heroPlaying: true, compact: false, drawer: false, signup: {} };
+
+  // Mailing list: the Google Apps Script web app that adds rows to the subscribers Sheet
+  // (see tools/mailing-list/README.md). Paste its /exec URL here.
+  static MAILING_LIST_URL = '';
+
+  subscribe = (e) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const source = form.dataset.source;
+    const set = (status) => this.setState((s) => ({ signup: { ...s.signup, [source]: status } }));
+    const data = new URLSearchParams(new FormData(form));
+    data.set('source', source);
+    data.set('page', location.pathname);
+    if (!this.constructor.MAILING_LIST_URL) return set('error');
+    set('sending');
+    fetch(this.constructor.MAILING_LIST_URL, { method: 'POST', body: data })
+      .then((r) => r.json())
+      .then((res) => {
+        if (!res.ok) return set(res.error === 'invalid' ? 'invalid' : 'error');
+        form.reset();
+        set('done');
+      })
+      .catch(() => set('error'));
+  };
+
+  signupView(source) {
+    const status = this.state.signup[source];
+    const msg = {
+      done: 'Thank you, you’re on the list. We’ll be in touch a few times a year.',
+      invalid: 'That email address doesn’t look right. Please check it and try again.',
+      error: 'Sorry, that didn’t go through. Please try again, or email aucklandnewballet@gmail.com.'
+    }[status] || '';
+    const idle = source === 'footer' ? 'Join' : 'Subscribe';
+    return { msg, btn: status === 'sending' ? 'Sending…' : idle };
+  }
 
   componentDidMount() {
     this.onResize = () => {
@@ -1254,6 +1291,11 @@ class Component extends DCLogic {
       goHome: this.nav('home'),
       goProgrammes: this.nav('programmes'),
       goDonate: this.nav('donate'),
+      subscribe: this.subscribe,
+      contactMsg: this.signupView('contact').msg,
+      contactBtn: this.signupView('contact').btn,
+      footerMsg: this.signupView('footer').msg,
+      footerBtn: this.signupView('footer').btn,
       goContact: this.nav('contact'),
       isHome: p === 'home',
       isAbout: p === 'about',
