@@ -14,9 +14,16 @@ Live at https://www.aucklandnewballet.co.nz (GitHub Pages, `main` branch, repo r
 | `static/video/anb-hero.mp4` | Home page hero video. |
 | `static/js/` | Claude Design runtime (`dc-runtime.js`), image slot component (`image-slot.js`) and React 18.3.1. Don't edit. |
 | `CNAME` | Custom domain. Keep it, or the domain detaches from Pages. |
+| `404.html` | Sends page addresses like `/artists` to `index.html`, which opens the right page. Keep it. |
 | `assets/`, `uploads/`, `video/` | Original source material from the client. Not used by the site. |
 | `docs/` | Site structure and the Claude Design handoff brief. |
 | `archive/claude-design/` | The last Claude Design source and export notes, kept for reference. |
+
+## Page addresses
+
+Each page has its own address: `/`, `/about`, `/artists`, `/leadership`, `/collaborators`, `/programmes`, `/donate`, `/sponsors`, `/contact`. An artist's biography is `/artists#artist-zoe` (the `id` on their section). The list lives in `ROUTES` in the script block of `index.html`; add a page there and in `TITLES`.
+
+Asset paths start with `/static/` so they work from every address. The local preview can't open `/artists` directly (Python's server has no `404.html` fallback); use `http://localhost:8191/?p=/artists` instead.
 
 ## Making changes
 
