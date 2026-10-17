@@ -406,11 +406,11 @@
 <main>
   <section style="position:relative;min-height:min(80vh,760px);display:flex;align-items:flex-end;overflow:hidden;background:#14111B">
     <div style="position:absolute;inset:0;overflow:hidden">
-      <image-slot id="hero-poster" shape="rect" fit="cover" placeholder="Hero poster frame — shown when motion is reduced" src="static/img/hero-poster.webp"></image-slot>
+      <image-slot id="hero-poster" shape="rect" fit="cover" style="display:block;width:100%;height:100%;transform:scale(1.28)" placeholder="Hero poster frame — shown when motion is reduced" src="static/img/hero-poster.webp"></image-slot>
     </div>
     <sc-if value="{{ heroVideo }}" hint-placeholder-val="{{ true }}">
       <div style="position:absolute;inset:0;overflow:hidden;background:#14111B">
-        <video ref="{{ heroRef }}" src="static/video/anb-hero.mp4" poster="static/img/hero-poster.webp" preload="auto" sc-camel-on-ended="{{ heroEnded }}" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block"></video>
+        <video ref="{{ heroRef }}" src="static/video/anb-hero.mp4" poster="static/img/hero-poster.webp" preload="auto" sc-camel-on-ended="{{ heroEnded }}" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.28)"></video>
       </div>
     </sc-if>
     <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(20,17,27,0.82) 0%,rgba(20,17,27,0.34) 45%,rgba(20,17,27,0.12) 100%);pointer-events:none"></div>
@@ -498,6 +498,9 @@
         <div style="width:170px;height:78px;display:flex;align-items:center;justify-content:center;padding:4px 10px">
           <img src="static/img/sponsor-wellesley-studios.svg" alt="Wellesley Studios" style="max-width:100%;max-height:100%;object-fit:contain;display:block">
         </div>
+        <div style="width:170px;height:78px;display:flex;align-items:center;justify-content:center;padding:4px 10px">
+          <img src="static/img/sponsor-feel-bespoke-clothier.png" alt="Feel, bespoke clothier" style="max-width:100%;max-height:100%;object-fit:contain;display:block;mix-blend-mode:multiply">
+        </div>
         <div style="width:170px;height:78px;display:flex;align-items:center;justify-content:center;padding:6px 10px">
           <img src="static/img/sponsor-auckland-council.svg" alt="Auckland Council" style="max-width:100%;max-height:100%;object-fit:contain;display:block">
         </div>
@@ -549,7 +552,7 @@
     <div style="max-width:1280px;margin:0 auto">
       <div style="font-size:11.5px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#937B45;margin-bottom:20px">Who We Are</div>
       <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(40px,6vw,76px);font-weight:400;line-height:1.05;margin:0 0 28px">ANB Artists</h1>
-      <p style="font-size:17px;line-height:1.66;color:#4A4356;margin:0 0 36px;max-width:56ch">Eight professional ballet artists, trained across Moscow, London, Melbourne, New York and Aotearoa, who chose to build a home for classical ballet in Tāmaki Makaurau.</p>
+      <p style="font-size:17px;line-height:1.66;color:#4A4356;margin:0 0 36px;max-width:56ch">Seven professional ballet artists, trained across Moscow, London, Melbourne, New York and Aotearoa, who chose to build a home for classical ballet in Tāmaki Makaurau.</p>
       <div style="display:flex;flex-wrap:wrap;gap:8px;border-top:1px solid rgba(61,43,86,0.14);padding-top:22px">
         <a href="#artist-madison" style="font-size:13px;padding:8px 15px;border:1px solid rgba(61,43,86,0.22);color:#3D2B56" style-hover="background:#3D2B56;color:#F7F4F9;text-decoration:none">Madison Fotti-Knowles</a>
         <a href="#artist-amelia" style="font-size:13px;padding:8px 15px;border:1px solid rgba(61,43,86,0.22);color:#3D2B56" style-hover="background:#3D2B56;color:#F7F4F9;text-decoration:none">Amelia Chandulal-Mackay</a>
@@ -558,7 +561,6 @@
         <a href="#artist-kimberley" style="font-size:13px;padding:8px 15px;border:1px solid rgba(61,43,86,0.22);color:#3D2B56" style-hover="background:#3D2B56;color:#F7F4F9;text-decoration:none">Kimberley Mear</a>
         <a href="#artist-louis" style="font-size:13px;padding:8px 15px;border:1px solid rgba(61,43,86,0.22);color:#3D2B56" style-hover="background:#3D2B56;color:#F7F4F9;text-decoration:none">Louis Ramsay</a>
         <a href="#artist-katrina" style="font-size:13px;padding:8px 15px;border:1px solid rgba(61,43,86,0.22);color:#3D2B56" style-hover="background:#3D2B56;color:#F7F4F9;text-decoration:none">Katrina Casey</a>
-        <a href="#artist-grace" style="font-size:13px;padding:8px 15px;border:1px solid rgba(61,43,86,0.22);color:#3D2B56" style-hover="background:#3D2B56;color:#F7F4F9;text-decoration:none">Grace Ella</a>
       </div>
     </div>
   </section>
@@ -638,17 +640,6 @@
         </div>
       </div>
 
-      <div id="artist-grace" style="background:#F2EEF4;padding:clamp(32px,4vw,56px) 0;display:flex;flex-wrap:wrap;align-items:flex-start;gap:clamp(24px,4vw,52px);scroll-margin-top:96px" data-reveal="1">
-        <div style="flex:1 1 300px;min-width:0;order:2">
-          <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(28px,3vw,38px);font-weight:400;margin:0 0 8px">Grace Ella</h2>
-          <div style="font-size:11.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#937B45;margin-bottom:22px">ANB Founder and Production Mentor</div>
-          <p style="font-size:15.5px;line-height:1.72;color:#4A4356;margin:0 0 16px;max-width:60ch">Grace Ella is a dance artist and choreographer from Aotearoa, New Zealand, who has worked internationally for the past three years. She graduated in 2022 with a Bachelor of Performing Arts (Screen Arts) from Unitec. During the initial phase of her career, she developed an award-winning Fringe performance, Quantum Tangerine. She also conducted a 6-week research process for Holding the Sun, a body of work that investigated unique architectural zones and volcanic topographies, particularly centred in Tāmaki Makaurau.</p>
-          <p style="font-size:15.5px;line-height:1.72;color:#4A4356;margin:0 0 16px;max-width:60ch">As a movement artist, Grace has had the pleasure of working and collaborating with practitioners across Aotearoa, Germany, London and Belgium and is part of the core production team for Te Wiki o Āhua Aotearoa. Grace’s journey into physical practice began with studying Architecture and Music Composition at Te Herenga Waka – Victoria University of Wellington, and slowly merged into the dance sphere.</p>
-          <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;line-height:1.55;color:#3D2B56;margin:0;max-width:52ch">Grace Ella explores the transfigured human, enhancing the delicate balance between care and physical overload. Through this process, she seeks to cultivate empathy in the viewer while shaping forms that appear unattainable, extending beyond the natural limits of human capability.</p>
-        </div>
-        <div style="width:min(100%,264px);aspect-ratio:4/5;flex-shrink:0;order:1;min-width:0;overflow:hidden"><image-slot id="artist-photo-grace" shape="rect" placeholder="Grace Ella — headshot" src="static/img/artist-photo-grace.webp"></image-slot></div>
-      </div>
-
     </div>
   </section>
 </main>
@@ -677,7 +668,7 @@
           </sc-if>
           <sc-if value="{{ l.isOpen }}" hint-placeholder-val="{{ false }}">
             <div style="flex:1 1 100%;display:flex;flex-wrap:wrap;gap:clamp(24px,4vw,52px);padding-top:clamp(18px,2.4vw,28px);align-items:flex-start">
-              <div style="width:min(100%,220px);aspect-ratio:4/5;flex-shrink:0;min-width:0;overflow:hidden"><image-slot id="leader-photo-meaghan" shape="rect" placeholder="Meaghan Rowe — headshot"></image-slot></div>
+              <div style="width:min(100%,220px);aspect-ratio:4/5;flex-shrink:0;min-width:0;overflow:hidden"><image-slot id="leader-photo-meaghan" shape="rect" placeholder="Meaghan Rowe — headshot" src="static/img/leader-photo-meaghan.webp"></image-slot></div>
               <div style="flex:1 1 300px;min-width:0;max-width:64ch">
                 <p style="font-size:15.5px;line-height:1.72;color:#4A4356;margin:0 0 16px">Meaghan Rowe (ARAD RAD RTS; Pg Dip DEVE) is from Wellington, New Zealand, and specialises in coaching classical ballet and contemporary ballet. She is the co-founder and co-director of The Classical Collab, tutors at The Wellesley Studios and Unitec, and is Rehearsal Director for Fever Global productions and Auckland New Ballet.</p>
                 <p style="font-size:15.5px;line-height:1.72;color:#4A4356;margin:0 0 16px">Meaghan trained as a youth under Paula Hunt (RAD Chair of Examiners) at the Wellington Dance Academy, completing her Royal Academy of Dance Advanced Two exam with Distinction in 2001. She trained in the New Zealand School of Dance Associate Programme and won the Footnote Dance Choreolab Scholarship in 2002. After receiving a post-graduate degree in Political Science and Development from Victoria University in 2008, Meaghan completed her teaching accreditation with Robyn Sinclair at the Dunedin School of Ballet and Dance, where she specialised as a teacher of the senior classical students.</p>
@@ -733,6 +724,14 @@
         <h2 style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:400;margin:0 0 8px">Kulios Ensemble</h2>
         <div style="font-size:11.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#937B45">2026/7 Musicians in Residence</div>
       </div>
+      <div data-reveal="1">
+        <div style="aspect-ratio:4/5;margin-bottom:22px;min-width:0;overflow:hidden"><image-slot id="collab-photo-gracie" shape="rect" placeholder="Gracie Lewis — portrait" src="static/img/collab-photo-gracie.webp"></image-slot></div>
+        <h2 style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:400;margin:0 0 8px">Gracie Lewis</h2>
+        <div style="font-size:11.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#937B45;margin-bottom:18px">ANB Founder and Production Mentor</div>
+        <p style="font-size:15px;line-height:1.7;color:#4A4356;margin:0 0 14px">Gracie Lewis is a dance artist and choreographer from Aotearoa, New Zealand, who has worked internationally for the past three years. She graduated in 2022 with a Bachelor of Performing Arts (Screen Arts) from Unitec. During the initial phase of her career, she developed an award-winning Fringe performance, Quantum Tangerine. She also conducted a 6-week research process for Holding the Sun, a body of work that investigated unique architectural zones and volcanic topographies, particularly centred in Tāmaki Makaurau.</p>
+        <p style="font-size:15px;line-height:1.7;color:#4A4356;margin:0 0 14px">As a movement artist, Gracie has had the pleasure of working and collaborating with practitioners across Aotearoa, Germany, London and Belgium and is part of the core production team for Te Wiki o Āhua Aotearoa. Gracie’s journey into physical practice began with studying Architecture and Music Composition at Te Herenga Waka – Victoria University of Wellington, and slowly merged into the dance sphere.</p>
+        <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;line-height:1.55;color:#3D2B56;margin:0">Gracie Lewis explores the transfigured human, enhancing the delicate balance between care and physical overload. Through this process, she seeks to cultivate empathy in the viewer while shaping forms that appear unattainable, extending beyond the natural limits of human capability.</p>
+      </div>
     </div>
   </section>
 </main>
@@ -749,7 +748,7 @@
     <div style="max-width:1280px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:baseline;gap:10px clamp(20px,3vw,40px)">
       <div style="font-size:11.5px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:#C9B27E">What We Do — Upcoming Programmes</div>
       <h1 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);margin:0">Folklore</h1>
-      <p style="font-size:clamp(15px,1.5vw,18px);line-height:1.6;color:rgba(251,249,252,0.9);margin:0;flex:1 1 320px;max-width:62ch">A ballet in two acts. Holy Trinity Cathedral, Parnell, with live accompaniment by the Kulios Ensemble.</p>
+      <p style="font-size:clamp(15px,1.5vw,18px);line-height:1.6;color:rgba(251,249,252,0.9);margin:0;flex:1 1 320px;max-width:62ch">A ballet in two acts.</p>
     </div>
   </section>
 
