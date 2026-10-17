@@ -406,11 +406,11 @@
 <main>
   <section style="position:relative;min-height:min(80vh,760px);display:flex;align-items:flex-end;overflow:hidden;background:#14111B">
     <div style="position:absolute;inset:0;overflow:hidden">
-      <image-slot id="hero-poster" shape="rect" fit="cover" placeholder="Hero poster frame — shown when motion is reduced"></image-slot>
+      <image-slot id="hero-poster" shape="rect" fit="cover" placeholder="Hero poster frame — shown when motion is reduced" src="static/img/hero-poster.webp"></image-slot>
     </div>
     <sc-if value="{{ heroVideo }}" hint-placeholder-val="{{ true }}">
       <div style="position:absolute;inset:0;overflow:hidden;background:#14111B">
-        <video ref="{{ heroRef }}" src="static/video/anb-hero.mp4" preload="auto" sc-camel-on-ended="{{ heroEnded }}" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block"></video>
+        <video ref="{{ heroRef }}" src="static/video/anb-hero.mp4" poster="static/img/hero-poster.webp" preload="auto" sc-camel-on-ended="{{ heroEnded }}" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block"></video>
       </div>
     </sc-if>
     <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(20,17,27,0.82) 0%,rgba(20,17,27,0.34) 45%,rgba(20,17,27,0.12) 100%);pointer-events:none"></div>
@@ -462,7 +462,7 @@
         </div>
       </div>
       <div style="min-width:0;align-self:center" data-reveal="1">
-        <img src="static/img/folklore-poster-4x3.png" alt="Auckland New Ballet presents Folklore, in association with Pure Dance — two dancers in blue light" style="display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover">
+        <img src="static/img/folklore-poster-4x3.webp" alt="Auckland New Ballet presents Folklore, in association with Pure Dance — two dancers in blue light" style="display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover">
       </div>
     </div>
   </section>
@@ -742,7 +742,7 @@
 <main>
   <section style="background:#0E1430">
     <div style="max-width:1600px;margin:0 auto">
-      <img src="static/img/folklore-key-art-wide.png" alt="Auckland New Ballet presents Folklore, in association with Pure Dance — dancers in white tutus bathed in blue light" style="display:block;width:100%;height:auto;aspect-ratio:1170/504;object-fit:cover">
+      <img src="static/img/folklore-key-art-wide.webp" alt="Auckland New Ballet presents Folklore, in association with Pure Dance — dancers in white tutus bathed in blue light" style="display:block;width:100%;height:auto;aspect-ratio:1170/504;object-fit:cover">
     </div>
   </section>
   <section style="padding:clamp(28px,3.5vw,44px) clamp(20px,5vw,56px);background:#14111B">
@@ -783,14 +783,14 @@
           <div style="font-size:11.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#937B45;margin-bottom:6px">Ticket provider</div>
           <div style="font-size:14px;color:#4A4356;line-height:1.5">Whanganui Opera House &amp; Eventfinda</div>
         </div>
-        <div style="grid-column:span 2;min-width:0;border-top:1px solid rgba(61,43,86,0.14)">
-          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:16px clamp(20px,3vw,40px);padding:clamp(20px,2.4vw,26px) 0;border-bottom:1px solid rgba(61,43,86,0.14)">
+        <div style="grid-column:span 2;min-width:0">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:16px clamp(20px,3vw,40px);padding:0 0 clamp(20px,2.4vw,26px);border-bottom:1px solid rgba(61,43,86,0.14)">
             <div style="font-family:'Cormorant Garamond',serif;font-size:clamp(22px,2.2vw,28px);width:230px;flex-shrink:0">Saturday 19 December</div>
             <div style="font-size:15px;font-weight:600;width:96px;flex-shrink:0">1.00pm</div>
             <div style="flex:1 1 200px;min-width:0;font-size:14px;font-weight:600">Quiet Matinee — sensory-friendly</div>
             <a href="#tickets" style="background:#3D2B56;color:#F7F4F9;padding:13px 26px;font-size:12px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;white-space:nowrap" style-hover="background:#14111B;color:#F7F4F9;text-decoration:none">Buy Tickets</a>
           </div>
-          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:16px clamp(20px,3vw,40px);padding:clamp(20px,2.4vw,26px) 0;border-bottom:1px solid rgba(61,43,86,0.14)">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:16px clamp(20px,3vw,40px);padding:clamp(20px,2.4vw,26px) 0 0">
             <div style="font-family:'Cormorant Garamond',serif;font-size:clamp(22px,2.2vw,28px);width:230px;flex-shrink:0">Saturday 19 December</div>
             <div style="font-size:15px;font-weight:600;width:96px;flex-shrink:0">6.30pm</div>
             <div style="flex:1 1 200px;min-width:0;font-size:14px;font-weight:600">Evening performance</div>
@@ -804,8 +804,8 @@
           <div style="font-size:11.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#937B45;margin-bottom:6px">Ticket provider</div>
           <div style="font-size:14px;color:#4A4356;line-height:1.5">To be confirmed</div>
         </div>
-        <div style="grid-column:span 2;min-width:0;border-top:1px solid rgba(61,43,86,0.14)">
-          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:16px clamp(20px,3vw,40px);padding:clamp(20px,2.4vw,26px) 0;border-bottom:1px solid rgba(61,43,86,0.14)">
+        <div style="grid-column:span 2;min-width:0">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:16px clamp(20px,3vw,40px);padding:0 0 clamp(20px,2.4vw,26px);border-bottom:1px solid rgba(61,43,86,0.14)">
             <div style="font-family:'Cormorant Garamond',serif;font-size:clamp(22px,2.2vw,28px);width:230px;flex-shrink:0">Saturday 30 January</div>
             <div style="font-size:15px;font-weight:600;width:96px;flex-shrink:0">1.00pm</div>
             <div style="flex:1 1 200px;min-width:0;font-size:14px;font-weight:600">Quiet Matinee — sensory-friendly</div>
@@ -817,7 +817,7 @@
             <div style="flex:1 1 200px;min-width:0;font-size:14px;font-weight:600">Evening performance</div>
             <span style="border:1px solid rgba(61,43,86,0.28);color:#5D5568;padding:12px 24px;font-size:12px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;white-space:nowrap">Tickets soon</span>
           </div>
-          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:16px clamp(20px,3vw,40px);padding:clamp(20px,2.4vw,26px) 0;border-bottom:1px solid rgba(61,43,86,0.14)">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:16px clamp(20px,3vw,40px);padding:clamp(20px,2.4vw,26px) 0 0">
             <div style="font-family:'Cormorant Garamond',serif;font-size:clamp(22px,2.2vw,28px);width:230px;flex-shrink:0">Sunday 31 January</div>
             <div style="font-size:15px;font-weight:600;width:96px;flex-shrink:0">TBC</div>
             <div style="flex:1 1 200px;min-width:0;font-size:14px;font-weight:600">Evening performance</div>
@@ -831,8 +831,8 @@
           <div style="font-size:11.5px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#937B45;margin-bottom:6px">Ticket provider</div>
           <div style="font-size:14px;color:#4A4356;line-height:1.5">To be confirmed</div>
         </div>
-        <div style="grid-column:span 2;min-width:0;border-top:1px solid rgba(61,43,86,0.14)">
-          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:16px clamp(20px,3vw,40px);padding:clamp(20px,2.4vw,26px) 0;border-bottom:1px solid rgba(61,43,86,0.14)">
+        <div style="grid-column:span 2;min-width:0">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:16px clamp(20px,3vw,40px);padding:0">
             <div style="font-family:'Cormorant Garamond',serif;font-size:clamp(22px,2.2vw,28px);width:230px;flex-shrink:0">Saturday 13 February</div>
             <div style="font-size:15px;font-weight:600;width:96px;flex-shrink:0">TBC</div>
             <div style="flex:1 1 200px;min-width:0;font-size:14px;font-weight:600">Showtimes to be announced soon</div>
@@ -859,8 +859,7 @@
       </div>
       <div data-reveal="1">
         <h3 style="font-family:'Cormorant Garamond',serif;font-size:clamp(26px,2.8vw,34px);font-weight:400;margin:0 0 16px">Summer Regional Tour</h3>
-        <p style="font-size:15.5px;line-height:1.7;color:#4A4356;margin:0 0 18px">ANB brings Folklore to Waiheke Island, Whanganui, Tauranga and Kerikeri this summer. Keep an eye on our mailing list for dates and ticket info.</p>
-        <div style="display:inline-flex;font-size:11.5px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#937B45;border:1px solid rgba(147,123,69,0.5);padding:8px 14px">Dates to be announced</div>
+        <p style="font-size:15.5px;line-height:1.7;color:#4A4356;margin:0 0 18px">ANB brings Folklore to Whanganui, Waiheke Island and Tauranga this summer. Keep an eye on our mailing list for ticket info.</p>
       </div>
     </div>
   </section>
